@@ -6,19 +6,25 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.sql.Clob;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -48,7 +54,7 @@ import com.mongodb.client.model.InsertOneModel;
 @EnableAutoConfiguration(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 public class MigrationToolApplication {
 
-	private final static String[] tableList = {"TEST_TABLE"};
+	private static ArrayList<Map<String,String>> tableList = new ArrayList<Map<String,String>>();
 
 	private static Logger logger = LoggerFactory.getLogger(MigrationToolApplication.class);
 
@@ -64,7 +70,7 @@ public class MigrationToolApplication {
 
 	
 	
-	private static void oracleToMongoInsert(String tableName) throws IOException {
+	private static void oracleToMongoInsert(String tableName , String whereQuery) throws Exception {
 
 		StringBuilder sqlString = new StringBuilder()
 				.append("SELECT * FROM  ").append(tableName).append(" WHERE test_id <= 5 ");
@@ -96,19 +102,8 @@ public class MigrationToolApplication {
 				for (int idx = 1; idx < columnCount+1; idx++) {
 					
 					String key = rsmd.getColumnName(idx).toLowerCase();
-				 
-					Object value ;
 					int columnTypeCode =  rsmd.getColumnType(idx) ;
-				    if( columnTypeCode == 2005 ){  // clob 2005
-				       value = clobToString( (Clob) rs.getObject(idx) );
-					}else if( columnTypeCode == 91 )  {
-					   String dateString = (String) rs.getObject(idx) ;
-				       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-				       LocalDate date = LocalDate.parse(dateString, formatter);
-					   value = date.format(formatter);  
-					}else if( columnTypeCode == 2 ) {
-					   value = (int) rs.getObject(idx);
-					}					
+				    buffer.put(key, converTypeCasting( columnTypeCode , rs.getObject(idx)));
 				}
 
 				insertDoc = new Document(buffer);
@@ -134,12 +129,29 @@ public class MigrationToolApplication {
 
 	}
 
+	private static Object converTypeCasting(int columnTypeCode, Object object) throws Exception {
+		Object value ;
+		if( columnTypeCode == 2005 ){  // clob 2005
+	       value = clobToString( (Clob) object );
+		}else if( columnTypeCode == 93 )  {
+		  DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		  value = df.format( object );
+	    
+		}else if( columnTypeCode == 2 ) {
+			value = Integer.valueOf(((BigDecimal) object).intValue());
+		
+		}else {
+			value =  object;
+		}
+		return value;
+	}
+
 	public static void batchWorker() {
 		boolean isResult = false;
 
 		try {
-			for (String tableName : tableList) {
-				oracleToMongoInsert( tableName );
+			for ( Map<String, String> data :  tableList) {
+				oracleToMongoInsert( data.get("tableName") , data.get("whereQuery"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,7 +159,7 @@ public class MigrationToolApplication {
 
 	}
 
-	public static void batchInit(){
+	public static void batchInitConnection(){
 
 		// ---------------------------------------------------------------------
 		// Oracle Connect
@@ -212,6 +224,9 @@ public class MigrationToolApplication {
 		return conn;
 	}
 	
+	public String base64Decoding() {
+		return "";
+	}
 	
 	
 	public void oracleDummyData ()  throws Exception{
@@ -234,6 +249,16 @@ public class MigrationToolApplication {
 
 	}
 
+	public  void batchInitTargetTableSetting () throws Exception{
+		
+		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
+		Map<String,String> map = new HashMap<String, String>();
+		map.put("tableName", "TEST_TABLE");
+		map.put("whereQuery", "where test_id <=5 ");
+		list.add(map);
+		tableList = list;
+	}
+	
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
@@ -242,7 +267,8 @@ public class MigrationToolApplication {
 			logger.info("--------------------------------------------------------------------------------");
 
 			
-			batchInit();
+			batchInitConnection();
+			batchInitTargetTableSetting();
 			// oracleDummyData();
 			batchWorker();
 
@@ -281,6 +307,7 @@ public class MigrationToolApplication {
 
 	
 //  colomun type code	
+	
 //	Array: 2003
 //
 //	Big int: -5
