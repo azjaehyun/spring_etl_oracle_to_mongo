@@ -3,24 +3,13 @@ package com.mongodb.migtool;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.math.BigDecimal;
-import java.sql.Clob;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +18,8 @@ import java.util.Map;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -40,14 +31,26 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.bulk.BulkWriteResult;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.InsertOneModel;
+import com.mongodb.client.model.Sorts;
+import com.mongodb.migtool.model.Stage1ChangedProfileSetup;
+import com.mongodb.migtool.model.Stage1PresentProfilesSetup;
+import com.mongodb.migtool.model.Stage1ProfileInfo;
+import com.mongodb.migtool.model.Stage2ChangedProfileSetup;
+import com.mongodb.migtool.model.Stage2PresentProfilesSetup;
+import com.mongodb.migtool.model.Stage2ProfileInfo;
+import com.mongodb.migtool.util.MigUtil;
+
 
 @SpringBootApplication
 // 자동으로 MongoAutoConfiguration 이나 MongoDataAutoConfiguration 이 실행 되지 않도록 방지
@@ -62,18 +65,17 @@ public class MigrationToolApplication {
 
 	private static MongoClient mongoClient;
 	private static Connection conn;
-
+	
+	private final static String OracleDatabaseName = "xe";
+	private final static String MongoDataBaseName = "forum";
 	
 	
-
-
-
 	
 	
-	private static void oracleToMongoInsert(String tableName , String whereQuery) throws Exception {
-
+	private static void oracleToMongoInsert(String tableName , String whereQuery , String insertMongoCollectionName) throws Exception {
+		
 		StringBuilder sqlString = new StringBuilder()
-				.append("SELECT * FROM  ").append(tableName).append(" WHERE test_id <= 5 ");
+				.append("SELECT * FROM  ").append(tableName).append(" where 1=1 and ").append(whereQuery);
 		
 
 		try {
@@ -89,8 +91,8 @@ public class MigrationToolApplication {
 			HashMap buffer = null;
 
 			MongoDatabase mongoDatabase = mongoClient.getDatabase("forum");
-			MongoCollection mongoCollection = mongoDatabase.getCollection("test_collection");
-
+			MongoCollection mongoCollection = mongoDatabase.getCollection(insertMongoCollectionName); //"test_collection"
+			
 			BulkWriteResult bulkWriteResult = null;
 
 			InsertOneModel insertOneModel = null;
@@ -100,58 +102,43 @@ public class MigrationToolApplication {
 			while (rs.next()) {
 				buffer = new HashMap<String,Object>();
 				for (int idx = 1; idx < columnCount+1; idx++) {
-					
-					String key = rsmd.getColumnName(idx).toLowerCase();
+					String key = rsmd.getColumnName(idx).toUpperCase();
 					int columnTypeCode =  rsmd.getColumnType(idx) ;
-				    buffer.put(key, converTypeCasting( columnTypeCode , rs.getObject(idx)));
+				    buffer.put(key,  MigUtil.converTypeCasting( columnTypeCode , rs.getObject(idx)));
 				}
-
-				insertDoc = new Document(buffer);
+				Map<String,Object> remappingMap = convertTargetDocumentVO(buffer,insertMongoCollectionName );
+				insertDoc = new Document(remappingMap);
 				insertOneModel = new InsertOneModel(insertDoc);
 				insertDocuments.add(insertOneModel);
 				insertCount++;
-
 				if(insertCount % 1000 == 0) {
-					System.out.println(insertCount);
+					System.out.println("bulkWriteCount : "+insertCount);
 					bulkWriteResult = mongoCollection.bulkWrite(insertDocuments);
 					insertDocuments = new ArrayList<>();
 				}
-
 			} // End of While Loop Fetch
-
 			// Commit Rest of Insert Doc
-		
 			mongoCollection.bulkWrite(insertDocuments);
+			System.out.println("From Oracle TableName : " +tableName + " / To MongoCollection : " + insertMongoCollectionName+ " / insert count : "+insertCount);
 
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
 
 	}
+	
 
-	private static Object converTypeCasting(int columnTypeCode, Object object) throws Exception {
-		Object value ;
-		if( columnTypeCode == 2005 ){  // clob 2005
-	       value = clobToString( (Clob) object );
-		}else if( columnTypeCode == 93 )  {
-		  DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		  value = df.format( object );
-	    
-		}else if( columnTypeCode == 2 ) {
-			value = Integer.valueOf(((BigDecimal) object).intValue());
-		
-		}else {
-			value =  object;
-		}
-		return value;
-	}
+
+	
+
+	
 
 	public static void batchWorker() {
 		boolean isResult = false;
 
 		try {
 			for ( Map<String, String> data :  tableList) {
-				oracleToMongoInsert( data.get("tableName") , data.get("whereQuery"));
+				oracleToMongoInsert( data.get("tableName") , data.get("whereQuery") , data.get("targetCollection"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -164,7 +151,7 @@ public class MigrationToolApplication {
 		// ---------------------------------------------------------------------
 		// Oracle Connect
 		String driver = "oracle.jdbc.driver.OracleDriver";
-		String url="jdbc:oracle:thin:@localhost:1521:xe";
+		String url="jdbc:oracle:thin:@localhost:1521:"+OracleDatabaseName;
 		String user="system";
 		String pwd="oracle";
 
@@ -174,7 +161,7 @@ public class MigrationToolApplication {
 		// MongoDB Connect with MongoDB URI format
 		ConnectionString connectionString = new ConnectionString(
 				//"mongodb://admin:admin@localhost:27017,localhost:27018,localhost:27019/test?authSource=admin&replicaSet=replset"
-				"mongodb://jaehyun:jaehyun@localhost:27017/forum?authMechanism=SCRAM-SHA-1"
+				"mongodb://jaehyun:jaehyun@localhost:27017/"+MongoDataBaseName+"?authMechanism=SCRAM-SHA-1"
 		);
 		
 
@@ -224,38 +211,27 @@ public class MigrationToolApplication {
 		return conn;
 	}
 	
-	public String base64Decoding() {
-		return "";
-	}
 	
-	
-	public void oracleDummyData ()  throws Exception{
-		
-		for (int i = 0 ; i < 1000000 ; i++) {
-			// Make Insert Query
-			String clobValue = "test";
-			String strQuery = "INSERT INTO TEST_TABLE ( TEST_ID , TEST_TITLE , TEST_DATE  ) VALUES( ?, ? ,? )";
-			PreparedStatement pstmt = conn.prepareStatement(strQuery);
-			pstmt.setInt(1, 1);
-			// pstmt.setString(2, "test");
-			pstmt.setCharacterStream(2 , new StringReader(clobValue), clobValue.length());
-			pstmt.setString(3, "sysdate");
-			// Insert Row
-			int nRowCnt = pstmt.executeUpdate(strQuery);
-			//System.out.println(nRowCnt);
-			pstmt.close();
-			
-		}
-
-	}
 
 	public  void batchInitTargetTableSetting () throws Exception{
 		
 		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
-		Map<String,String> map = new HashMap<String, String>();
-		map.put("tableName", "TEST_TABLE");
-		map.put("whereQuery", "where test_id <=5 ");
-		list.add(map);
+		Map<String,String> map1 = new HashMap<String, String>();
+		map1.put("tableName", "TEST_TABLE");
+		map1.put("whereQuery", "test_id <=5 ");
+		map1.put("targetCollection","stage1ProfileInfo");
+		list.add(map1);
+		
+//		Map<String,String> map2 = new HashMap<String, String>();
+//		map2.put("tableName", "TEST_TABLE");
+//		map2.put("whereQuery", "test_id <=5 ");
+//		list.add(map2);
+//		
+//		Map<String,String> map3 = new HashMap<String, String>();
+//		map3.put("tableName", "TEST_TABLE");
+//		map3.put("whereQuery", "test_id <=5 ");
+//		list.add(map3);
+		
 		tableList = list;
 	}
 	
@@ -266,7 +242,6 @@ public class MigrationToolApplication {
 			logger.info("Start MigrationToolApplication");
 			logger.info("--------------------------------------------------------------------------------");
 
-			
 			batchInitConnection();
 			batchInitTargetTableSetting();
 			// oracleDummyData();
@@ -281,102 +256,101 @@ public class MigrationToolApplication {
 
 		};
 	}
-	
 
-	public static String clobToString(Clob clob) throws SQLException, IOException {
-
-		if (clob == null) {
-			return "";
-		}
-
-		StringBuffer strOut = new StringBuffer();
-
-		String str = "";
-
-		BufferedReader br = new BufferedReader(clob.getCharacterStream());
-
-		while ((str = br.readLine()) != null) {
-			strOut.append(str);
-		}
-		return strOut.toString();
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MigrationToolApplication.class, args);
 	}
+	
+	
+	
+	public static Map<String,Object> convertTargetDocumentVO(HashMap buffer, String insertMongoCollectionName ) {
+		
+		System.out.println(getMasterObjectId( buffer.get("SEQ").toString() , insertMongoCollectionName ));
+		
+		Map<String,Object> remapping = new HashMap<String, Object>();
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		if("stage1ProfileInfo".equals(insertMongoCollectionName)) {
+			Map result = objectMapper.convertValue(Stage1ProfileInfo.builder().profileIndex( Integer.parseInt(buffer.get("PROFILE_INDEX").toString()))
+																			  .vin(buffer.get("VIN").toString())
+																			  .nadID(buffer.get("NADID").toString())
+																			  .isSynced(Boolean.FALSE)
+																			  .createdTime(buffer.get("RGST_DTM").toString())
+																			  .seq(buffer.get("SEQ").toString())
+																			  .build(), Map.class);
+			remapping = result;
+		}else if("stage2ProfileInfo".equals(insertMongoCollectionName)) {
+			Map result = objectMapper.convertValue(Stage2ProfileInfo.builder().profileIndex( Integer.parseInt(buffer.get("PROFILE_INDEX").toString()))
+																			  .profileName(buffer.get("PROFILE_NAME").toString())
+																			  .profileID(buffer.get("PROFILE_ID").toString())
+																			  .phoneNum(buffer.get("PHONE_NUM").toString())
+																			  .vin(buffer.get("VIN").toString())
+																			  .nadID(buffer.get("NADID").toString())
+																			  .createdTime(buffer.get("RGST_DTM").toString())
+																			  .seq(buffer.get("SEQ").toString())
+																			  .build(), Map.class);
+			remapping = result;
+		}else if("stage1PresentProfileSetup".equals(insertMongoCollectionName)) {
+			
+			Map result = objectMapper.convertValue(Stage1PresentProfilesSetup.builder()._id(  Stage1PresentProfilesSetup.ProfileInfo.builder().profileInfoId( getMasterObjectId( buffer.get("seq").toString() , insertMongoCollectionName ) ).category(buffer.get("CATEGORY").toString()).build()  )
+																					   .metaDataVersion(buffer.get("METADATA_VERSION").toString())
+																					   .savedTime(Stage1PresentProfilesSetup.SaveTimeInfo.builder().utc(buffer.get("UTC_OFFSET_DATETIME").toString()).offset(buffer.get("UTC_OFFSET").toString()).build() )
+																					   .fileName(buffer.get("FILENAME").toString())		
+																					   .setupFile(  !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString()) // category 50번 아닌것 base64 decoding 
+																					   .createdDate(buffer.get("RGST_DTM").toString())
+																					   .build(),Map.class);
+			remapping = result;
+		}else if("stage2PresentProfileSetup".equals(insertMongoCollectionName)) {
+			
+			Map result = objectMapper.convertValue(Stage2PresentProfilesSetup.builder()._id(  Stage2PresentProfilesSetup.ProfileInfo.builder().profileInfoId( getMasterObjectId( buffer.get("seq").toString() , insertMongoCollectionName ) ).category(buffer.get("CATEGORY").toString()).build()  )
+																					   .metaDataVersion(buffer.get("METADATA_VERSION").toString())
+																					   .savedTime(Stage2PresentProfilesSetup.SaveTimeInfo.builder().utc(buffer.get("UTC_OFFSET_DATETIME").toString()).offset(buffer.get("UTC_OFFSET").toString()).build() )
+																					   .fileName( buffer.get("FILENAME").toString())  	
+																					   .setupFile(  !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString()) // category 50번 아닌것 base64 decoding 
+																					   .createdDate(buffer.get("RGST_DTM").toString())
+																					   .build(),Map.class);
+			remapping = result;
+		}else if("stage1ChangedProfileSetup".equals(insertMongoCollectionName)) {
+			
+			Map result = objectMapper.convertValue(Stage1ChangedProfileSetup.builder()._id(  Stage1ChangedProfileSetup.ProfileInfo.builder().profileInfoId( getMasterObjectId( buffer.get("seq").toString() , insertMongoCollectionName ) ).category(buffer.get("CATEGORY").toString()).build()  )
+																					   .metaDataVersion(buffer.get("METADATA_VERSION").toString())
+																					   .savedTime(Stage1ChangedProfileSetup.SaveTimeInfo.builder().utc(buffer.get("UTC_OFFSET_DATETIME").toString()).offset(buffer.get("UTC_OFFSET").toString()).build() )
+																					   .fileName( buffer.get("FILENAME").toString())  	
+																					   .setupFile(  !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString()) // category 50번 아닌것 base64 decoding 
+																					   .createdDate(buffer.get("RGST_DTM").toString())
+																					   .build(),Map.class);
+			remapping = result;
+		}else if("stage2ChangedProfileSetup".equals(insertMongoCollectionName)) {
+			Map result = objectMapper.convertValue(Stage2ChangedProfileSetup.builder()._id(  Stage2ChangedProfileSetup.ProfileInfo.builder().profileInfoId( getMasterObjectId( buffer.get("seq").toString() , insertMongoCollectionName ) ).category(buffer.get("CATEGORY").toString()).build()  )
+																					   .metaDataVersion(buffer.get("METADATA_VERSION").toString())
+																					   .savedTime(Stage2ChangedProfileSetup.SaveTimeInfo.builder().utc(buffer.get("UTC_OFFSET_DATETIME").toString()).offset(buffer.get("UTC_OFFSET").toString()).build() )
+																					   .fileName( buffer.get("FILENAME").toString())  	
+																					   .setupFile(  !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString()) // category 50번 아닌것 base64 decoding 
+																					   .createdDate(buffer.get("RGST_DTM").toString())
+																					   .build(),Map.class);
+		}else {
+			
+		}
+	
+		return remapping;
+	}
 
+	public static ObjectId getMasterObjectId (String seq , String insertMongoCollectionName ) {
+		Bson filter = Filters.eq("seq",seq);
+		Bson sort = Sorts.descending("seq");
+		
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(MongoDataBaseName);
+		MongoCollection mongoCollection = null;
 	
-//  colomun type code	
-	
-//	Array: 2003
-//
-//	Big int: -5
-//
-//	Binary: -2
-//
-//	Bit: -7
-//
-//	Blob: 2004
-//
-//	Boolean: 16
-//
-//	Char: 1
-//
-//	Clob: 2005
-//
-//	Date: 91
-//
-//	Datalink70
-//
-//	Decimal: 3
-//
-//	Distinct: 2001
-//
-//	Double: 8
-//
-//	Float: 6
-//
-//	Integer: 4
-//
-//	JavaObject: 2000
-//
-//	Long var char: -16
-//
-//	Nchar: -15
-//
-//	NClob: 2011
-//
-//	Varchar: 12
-//
-//	VarBinary: -3
-//
-//	Tiny int: -6
-//
-//	Time stamt with time zone: 2014
-//
-//	Timestamp: 93
-//
-//	Time: 92
-//
-//	Struct: 2002
-//
-//	SqlXml: 2009
-//
-//	Smallint: 5
-//
-//	Rowid: -8
-//
-//	Refcursor: 2012
-//
-//	Ref: 2006
-//
-//	Real: 7
-//
-//	Nvarchar: -9
-//
-//	Numeric: 2
-//
-//	Null: 0
-//
-//	Smallint: 5
+		if(insertMongoCollectionName.indexOf("1") > 0) {
+			mongoCollection = mongoDatabase.getCollection("stage1ProfileInfo");
+		}else {
+			mongoCollection = mongoDatabase.getCollection("stage2ProfileInfo");
+		}
+		FindIterable<Document> resultObj =   mongoCollection.find(filter  ).sort(sort);
+		return new ObjectId( resultObj.first().get("_id").toString() );
+	}
+
+
 }

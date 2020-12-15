@@ -1,3 +1,9 @@
+dbinfo:
+   oracle :
+      - oracle_test
+   mongo :
+      - mongo_test   
+
 #spring:
 #  data:
 #    mongodb:
