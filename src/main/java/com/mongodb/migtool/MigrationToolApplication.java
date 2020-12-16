@@ -138,10 +138,14 @@ public class MigrationToolApplication {
 
 	public static void batchWorker() {
 		boolean isResult = false;
-
 		try {
+			System.out.println();
 			for ( Map<String, String> data :  tableList) {
+				long beforeTime = System.currentTimeMillis();
 				oracleToMongoInsert( data.get("tableName") , data.get("whereQuery") , data.get("targetCollection"));
+				long afterTime = System.currentTimeMillis(); 
+				long secDiffTime = (afterTime - beforeTime)/1000;
+				System.out.println("시간차이(m) : "+secDiffTime);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
