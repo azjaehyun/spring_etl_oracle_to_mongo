@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.BsonObjectId;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -32,7 +33,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.ConnectionString;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.FindIterable;
@@ -49,6 +52,7 @@ import com.mongodb.migtool.model.Stage1ProfileInfo;
 import com.mongodb.migtool.model.Stage2ChangedProfileSetup;
 import com.mongodb.migtool.model.Stage2PresentProfilesSetup;
 import com.mongodb.migtool.model.Stage2ProfileInfo;
+import com.mongodb.migtool.model.TestInsert;
 import com.mongodb.migtool.util.MigUtil;
 
 
@@ -106,9 +110,8 @@ public class MigrationToolApplication {
 					int columnTypeCode =  rsmd.getColumnType(idx) ;
 				    buffer.put(key,  MigUtil.converTypeCasting( columnTypeCode , rs.getObject(idx)));
 				}
-				Map<String,Object> remappingMap = convertTargetDocumentVO(buffer,insertMongoCollectionName );
-				insertDoc = new Document(remappingMap);
-				insertOneModel = new InsertOneModel(insertDoc);
+				Document remappingMap = convertTargetDocumentVO(buffer,insertMongoCollectionName );
+				insertOneModel = new InsertOneModel(remappingMap);
 				insertDocuments.add(insertOneModel);
 				insertCount++;
 				if(insertCount % 1000 == 0) {
@@ -218,8 +221,8 @@ public class MigrationToolApplication {
 		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
 		Map<String,String> map1 = new HashMap<String, String>();
 		map1.put("tableName", "TEST_TABLE");
-		map1.put("whereQuery", "test_id <=5 ");
-		map1.put("targetCollection","stage1ProfileInfo");
+		map1.put("whereQuery", "test_id <=1 ");
+		map1.put("targetCollection","stage1PresentProfileSetup");
 		list.add(map1);
 		
 //		Map<String,String> map2 = new HashMap<String, String>();
@@ -264,79 +267,102 @@ public class MigrationToolApplication {
 	
 	
 	
-	public static Map<String,Object> convertTargetDocumentVO(HashMap buffer, String insertMongoCollectionName ) {
+	public static Document convertTargetDocumentVO(HashMap buffer, String insertMongoCollectionName ) {
 		
-		System.out.println(getMasterObjectId( buffer.get("SEQ").toString() , insertMongoCollectionName ));
-		
-		Map<String,Object> remapping = new HashMap<String, Object>();
-		ObjectMapper objectMapper = new ObjectMapper();
-		
+		Document dc = new Document();		
+		Map<String,Object> idSet = new HashMap<String,Object>();
+		Map<String,Object> savedTimeVal = new HashMap<String,Object>();
 		if("stage1ProfileInfo".equals(insertMongoCollectionName)) {
-			Map result = objectMapper.convertValue(Stage1ProfileInfo.builder().profileIndex( Integer.parseInt(buffer.get("PROFILE_INDEX").toString()))
-																			  .vin(buffer.get("VIN").toString())
-																			  .nadID(buffer.get("NADID").toString())
-																			  .isSynced(Boolean.FALSE)
-																			  .createdTime(buffer.get("RGST_DTM").toString())
-																			  .seq(buffer.get("SEQ").toString())
-																			  .build(), Map.class);
-			remapping = result;
+			
+			dc.append("profileIndex",Integer.parseInt(buffer.get("PROFILE_INDEX").toString()));
+			dc.append("vin",buffer.get("VIN").toString() );
+			dc.append("nadID",buffer.get("NADID").toString());
+			dc.append("isSynced", Boolean.FALSE);
+			dc.append("createdTime", buffer.get("RGST_DTM").toString() );
+			dc.append("seq",buffer.get("SEQ").toString());
+			
 		}else if("stage2ProfileInfo".equals(insertMongoCollectionName)) {
-			Map result = objectMapper.convertValue(Stage2ProfileInfo.builder().profileIndex( Integer.parseInt(buffer.get("PROFILE_INDEX").toString()))
-																			  .profileName(buffer.get("PROFILE_NAME").toString())
-																			  .profileID(buffer.get("PROFILE_ID").toString())
-																			  .phoneNum(buffer.get("PHONE_NUM").toString())
-																			  .vin(buffer.get("VIN").toString())
-																			  .nadID(buffer.get("NADID").toString())
-																			  .createdTime(buffer.get("RGST_DTM").toString())
-																			  .seq(buffer.get("SEQ").toString())
-																			  .build(), Map.class);
-			remapping = result;
+			
+			dc.append("profileIndex",Integer.parseInt(buffer.get("PROFILE_INDEX").toString()));
+			dc.append("profileName",buffer.get("PROFILE_NAME").toString());
+			dc.append("profileID",buffer.get("PROFILE_ID").toString());
+			dc.append("phoneNum",buffer.get("PHONE_NUM").toString());
+			dc.append("vin",buffer.get("VIN").toString());
+			dc.append("nadID",buffer.get("NADID").toString());
+			dc.append("createdTime",buffer.get("RGST_DTM").toString());  
+			dc.append("seq",buffer.get("SEQ").toString());
+			// dc.append("",);
+			
 		}else if("stage1PresentProfileSetup".equals(insertMongoCollectionName)) {
+		  
+		    idSet.put("profileInfoId", new ObjectId( getMasterObjectId( buffer.get("SEQ").toString() , insertMongoCollectionName )) );
+		    idSet.put("category", buffer.get("CATEGORY").toString()  );
+		    
 			
-			Map result = objectMapper.convertValue(Stage1PresentProfilesSetup.builder()._id(  Stage1PresentProfilesSetup.ProfileInfo.builder().profileInfoId( getMasterObjectId( buffer.get("seq").toString() , insertMongoCollectionName ) ).category(buffer.get("CATEGORY").toString()).build()  )
-																					   .metaDataVersion(buffer.get("METADATA_VERSION").toString())
-																					   .savedTime(Stage1PresentProfilesSetup.SaveTimeInfo.builder().utc(buffer.get("UTC_OFFSET_DATETIME").toString()).offset(buffer.get("UTC_OFFSET").toString()).build() )
-																					   .fileName(buffer.get("FILENAME").toString())		
-																					   .setupFile(  !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString()) // category 50번 아닌것 base64 decoding 
-																					   .createdDate(buffer.get("RGST_DTM").toString())
-																					   .build(),Map.class);
-			remapping = result;
+			savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
+			savedTimeVal.put("category", buffer.get("UTC_OFFSET").toString()  );
+			
+			dc.append("_id",idSet);
+			dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
+			dc.append("savedTime",savedTimeVal);
+			dc.append("fileName",buffer.get("FILENAME").toString());
+			dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString());
+			dc.append("createdDate",buffer.get("RGST_DTM").toString());
+			//dc.append("",);
+
+		
 		}else if("stage2PresentProfileSetup".equals(insertMongoCollectionName)) {
+	   	   
+		    idSet.put("profileInfoId", new ObjectId( getMasterObjectId( buffer.get("SEQ").toString() , insertMongoCollectionName )) );
+		    idSet.put("category", buffer.get("CATEGORY").toString()  );
+		    
 			
-			Map result = objectMapper.convertValue(Stage2PresentProfilesSetup.builder()._id(  Stage2PresentProfilesSetup.ProfileInfo.builder().profileInfoId( getMasterObjectId( buffer.get("seq").toString() , insertMongoCollectionName ) ).category(buffer.get("CATEGORY").toString()).build()  )
-																					   .metaDataVersion(buffer.get("METADATA_VERSION").toString())
-																					   .savedTime(Stage2PresentProfilesSetup.SaveTimeInfo.builder().utc(buffer.get("UTC_OFFSET_DATETIME").toString()).offset(buffer.get("UTC_OFFSET").toString()).build() )
-																					   .fileName( buffer.get("FILENAME").toString())  	
-																					   .setupFile(  !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString()) // category 50번 아닌것 base64 decoding 
-																					   .createdDate(buffer.get("RGST_DTM").toString())
-																					   .build(),Map.class);
-			remapping = result;
+			savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
+			savedTimeVal.put("category", buffer.get("UTC_OFFSET").toString()  );
+			
+			dc.append("_id",idSet);
+			dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
+			dc.append("savedTime",savedTimeVal);
+			dc.append("fileName",buffer.get("FILENAME").toString());
+			dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString());
+			dc.append("createdDate",buffer.get("RGST_DTM").toString());
 		}else if("stage1ChangedProfileSetup".equals(insertMongoCollectionName)) {
+
+		    idSet.put("profileInfoId", new ObjectId( getMasterObjectId( buffer.get("SEQ").toString() , insertMongoCollectionName )) );
+		    idSet.put("category", buffer.get("CATEGORY").toString()  );
+		    
+			savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
+			savedTimeVal.put("category", buffer.get("UTC_OFFSET").toString()  );
 			
-			Map result = objectMapper.convertValue(Stage1ChangedProfileSetup.builder()._id(  Stage1ChangedProfileSetup.ProfileInfo.builder().profileInfoId( getMasterObjectId( buffer.get("seq").toString() , insertMongoCollectionName ) ).category(buffer.get("CATEGORY").toString()).build()  )
-																					   .metaDataVersion(buffer.get("METADATA_VERSION").toString())
-																					   .savedTime(Stage1ChangedProfileSetup.SaveTimeInfo.builder().utc(buffer.get("UTC_OFFSET_DATETIME").toString()).offset(buffer.get("UTC_OFFSET").toString()).build() )
-																					   .fileName( buffer.get("FILENAME").toString())  	
-																					   .setupFile(  !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString()) // category 50번 아닌것 base64 decoding 
-																					   .createdDate(buffer.get("RGST_DTM").toString())
-																					   .build(),Map.class);
-			remapping = result;
+			dc.append("_id",idSet);
+			dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
+			dc.append("savedTime",savedTimeVal);
+			dc.append("fileName",buffer.get("FILENAME").toString());
+			dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString());
+			dc.append("createdDate",buffer.get("RGST_DTM").toString());
+			
 		}else if("stage2ChangedProfileSetup".equals(insertMongoCollectionName)) {
-			Map result = objectMapper.convertValue(Stage2ChangedProfileSetup.builder()._id(  Stage2ChangedProfileSetup.ProfileInfo.builder().profileInfoId( getMasterObjectId( buffer.get("seq").toString() , insertMongoCollectionName ) ).category(buffer.get("CATEGORY").toString()).build()  )
-																					   .metaDataVersion(buffer.get("METADATA_VERSION").toString())
-																					   .savedTime(Stage2ChangedProfileSetup.SaveTimeInfo.builder().utc(buffer.get("UTC_OFFSET_DATETIME").toString()).offset(buffer.get("UTC_OFFSET").toString()).build() )
-																					   .fileName( buffer.get("FILENAME").toString())  	
-																					   .setupFile(  !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString()) // category 50번 아닌것 base64 decoding 
-																					   .createdDate(buffer.get("RGST_DTM").toString())
-																					   .build(),Map.class);
+		    idSet.put("profileInfoId", new ObjectId( getMasterObjectId( buffer.get("SEQ").toString() , insertMongoCollectionName )) );
+		    idSet.put("category", buffer.get("CATEGORY").toString()  );
+		    
+			savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
+			savedTimeVal.put("category", buffer.get("UTC_OFFSET").toString()  );
+			
+			dc.append("_id",idSet);
+			dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
+			dc.append("savedTime",savedTimeVal);
+			dc.append("fileName",buffer.get("FILENAME").toString());
+			dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString());
+			dc.append("createdDate",buffer.get("RGST_DTM").toString());
+
 		}else {
 			
 		}
 	
-		return remapping;
+		return dc;
 	}
 
-	public static ObjectId getMasterObjectId (String seq , String insertMongoCollectionName ) {
+	public static String getMasterObjectId (String seq , String insertMongoCollectionName ) {
 		Bson filter = Filters.eq("seq",seq);
 		Bson sort = Sorts.descending("seq");
 		
@@ -349,7 +375,9 @@ public class MigrationToolApplication {
 			mongoCollection = mongoDatabase.getCollection("stage2ProfileInfo");
 		}
 		FindIterable<Document> resultObj =   mongoCollection.find(filter  ).sort(sort);
-		return new ObjectId( resultObj.first().get("_id").toString() );
+		
+		
+		return  resultObj.first().get("_id").toString();
 	}
 
 

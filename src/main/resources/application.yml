@@ -12,8 +12,8 @@ dbinfo:
 ---
 logging:
   level:
-    root: error
-    sun.rmi: error
+    root: info
+    sun.rmi: info
     org.mongodb: info
     org.springframework: info
     com.mongodb.migtool: debug

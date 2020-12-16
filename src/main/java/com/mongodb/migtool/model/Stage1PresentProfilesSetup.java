@@ -1,7 +1,5 @@
 package com.mongodb.migtool.model;
 
-import java.util.Map;
-
 import org.bson.types.ObjectId;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.data.annotation.Id;
