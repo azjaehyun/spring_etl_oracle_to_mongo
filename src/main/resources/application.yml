@@ -1,8 +1,12 @@
 dbinfo:
-   oracle :
-      - oracle_test
-   mongo :
-      - mongo_test   
+   oracleip: localhost
+   oracleport: 1521
+   oracleid: system
+   oraclepw: oracle
+   oracledatabasename: xe
+   mongouri: mongodb://jaehyun:jaehyun@localhost:27017/
+   mongodatabasename: forum
+   mongodatabaseargs: authMechanism=SCRAM-SHA-1
 
 #spring:
 #  data:
@@ -18,3 +22,4 @@ logging:
     org.springframework: info
     com.mongodb.migtool: debug
     com.zaxxer.hikari: off
+
