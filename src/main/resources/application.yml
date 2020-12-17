@@ -1,12 +1,12 @@
 dbinfo:
-   oracleip: localhost
+   oracleip: 10.10.19.121
    oracleport: 1521
-   oracleid: system
-   oraclepw: oracle
-   oracledatabasename: xe
-   mongouri: mongodb://jaehyun:jaehyun@localhost:27017/
-   mongodatabasename: forum
-   mongodatabaseargs: authMechanism=SCRAM-SHA-1
+   oracleid: was_iss
+   oraclepw: vit_adm123!
+   oracledatabasename: gen2db
+   mongouri: mongodb://ccs_toRM:!1234ccs_toRM@10.11.52.246:27017,10.11.52.247:27017,10.11.52.248:27017/
+   mongodatabasename: ApptxPersonalization
+   mongodatabaseargs: authSource=admin&replicaSet=testReplSet&readPreference=primary&appname=MongoDB%20Compass&ssl=false
    fromRowNum: 1
    toRowNum: 1000
    servicetype: insert

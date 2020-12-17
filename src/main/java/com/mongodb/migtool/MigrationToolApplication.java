@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -30,8 +29,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -51,7 +48,7 @@ import com.mongodb.migtool.util.MigUtil;
 // 자동으로 MongoAutoConfiguration 이나 MongoDataAutoConfiguration 이 실행 되지 않도록 방지
 @EnableAutoConfiguration(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 @EnableConfigurationProperties
-public class MigrationToolApplication {
+public class MigrationToolApplication implements CommandLineRunner {
 	
 	@Value("${dbinfo.oracleip}") String oracleip;
 	@Value("${dbinfo.oracleport}") String oracleport;
@@ -75,67 +72,72 @@ public class MigrationToolApplication {
 	private static String TO_ROWNUM;
 	
 	public static void main(String[] args) {
+		
+		/* java -jar -Ddbinfo.fromRowNum="1" -Ddbinfo.toRowNum="1000" migtool-0.0.1-SNAPSHOT.jar    */ 
 		SpringApplication.run(MigrationToolApplication.class, args);
 	}
 	
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-			logger.info("--------------------------------------------------------------------------------");
-			logger.info("Start MigrationToolApplication");
-			logger.info("--------------------------------------------------------------------------------");
+	@Override
+    public void run(String... args) throws Exception {
+		logger.info("--------------------------------------------------------------------------------");
+		logger.info("Start MigrationToolApplication");
+		logger.info("--------------------------------------------------------------------------------");
 
-			
-			
-			
-			System.out.println("******************************************** ");
-		    System.out.println("***** application.yml properties info  ***** ");
-			Map<String,String> connectionParam = new HashMap<String,String>();
-			connectionParam.put("oracleip", oracleip);
-			connectionParam.put("oracleport", oracleport);
-			connectionParam.put("oracleid", oracleid);
-			connectionParam.put("oraclepw", oraclepw);
-			connectionParam.put("oracledatabasename", oracledatabasename);
-			connectionParam.put("mongouri", mongouri);
-			connectionParam.put("mongodatabasename", mongodatabasename);
-			connectionParam.put("mongodatabaseargs", mongodatabaseargs);
-			System.out.println("ORACLE_IP : "+oracleip);
-			System.out.println("ORACLE_PORT : "+oracleport);
-			System.out.println("ORACLE_ID : "+oracleid);
-			System.out.println("ORACLE_PW : "+oraclepw);
-			System.out.println("ORACLE_DATABASE_NAME : "+oracledatabasename);
-			System.out.println("ORACLE_MONGO_URI : "+mongouri);
-			System.out.println("ORACLE_MONGO_DATABASE : "+ mongodatabasename);
-			System.out.println("ORACLE_MONGO_URI_PARAM : "+ mongodatabaseargs);
-			System.out.println("***** application.yml properties info ***** ");
-			System.out.println("******************************************** ");
-			System.out.println("");
-			System.out.println(" >> Service Type :  "+servicetype);
-			System.out.println(" >> From DB RowNum  :  "+fromRowNum);
-			System.out.println(" >> To DB RowNum    :  "+toRowNum);
-			System.out.println("");
-			System.out.println("******************************************** ");
-			
-			MONGO_DATABASE_NAME = mongodatabasename;
-			//SERVICE_TYPE=serviceType.get().toString();
-			FROM_ROWNUM=fromRowNum;
-			TO_ROWNUM=toRowNum;
-			
-			batchInitConnection(connectionParam);
-			batchInitTargetTableSetting();
-			// oracleDummyData();
-			batchWorker();
+		
+		
+		
+		System.out.println("******************************************** ");
+	    System.out.println("***** application.yml properties info  ***** ");
+		Map<String,String> connectionParam = new HashMap<String,String>();
+		connectionParam.put("oracleip", oracleip);
+		connectionParam.put("oracleport", oracleport);
+		connectionParam.put("oracleid", oracleid);
+		connectionParam.put("oraclepw", oraclepw);
+		connectionParam.put("oracledatabasename", oracledatabasename);
+		connectionParam.put("mongouri", mongouri);
+		connectionParam.put("mongodatabasename", mongodatabasename);
+		connectionParam.put("mongodatabaseargs", mongodatabaseargs);
+		System.out.println("ORACLE_IP : "+oracleip);
+		System.out.println("ORACLE_PORT : "+oracleport);
+		System.out.println("ORACLE_ID : "+oracleid);
+		System.out.println("ORACLE_PW : "+oraclepw);
+		System.out.println("ORACLE_DATABASE_NAME : "+oracledatabasename);
+		System.out.println("ORACLE_MONGO_URI : "+mongouri);
+		System.out.println("ORACLE_MONGO_DATABASE : "+ mongodatabasename);
+		System.out.println("ORACLE_MONGO_URI_PARAM : "+ mongodatabaseargs);
+		System.out.println("***** application.yml properties info ***** ");
+		System.out.println("******************************************** ");
+		System.out.println("");
+		System.out.println(" >> Service Type :  "+servicetype);
+		System.out.println(" >> From DB RowNum  :  "+fromRowNum);
+		System.out.println(" >> To DB RowNum    :  "+toRowNum);
+		System.out.println("");
+		System.out.println("******************************************** ");
+		
+		MONGO_DATABASE_NAME = mongodatabasename;
+		//SERVICE_TYPE=serviceType.get().toString();
+		FROM_ROWNUM=fromRowNum;
+		TO_ROWNUM=toRowNum;
+		
+		batchInitConnection(connectionParam);
+		batchInitTargetTableSetting();
+		// oracleDummyData();
+		batchWorker();
 
-			logger.info("--------------------------------------------------------------------------------");
-			logger.info("MigrationToolApplication Finished");
-			logger.info("--------------------------------------------------------------------------------");
+		logger.info("--------------------------------------------------------------------------------");
+		logger.info("MigrationToolApplication Finished");
+		logger.info("--------------------------------------------------------------------------------");
 
-			conn.close();
-			mongoClient.close();
+		conn.close();
+		mongoClient.close();
 
-		};
 	}
+	
 
+	
+
+
+	
 	
 	private static void oracleToMongoInsert(String tableName , String whereQuery , String insertMongoCollectionName) throws Exception {
 		StringBuilder sqlString = new StringBuilder()
@@ -180,8 +182,6 @@ public class MigrationToolApplication {
 					insertDocuments = new ArrayList<>();
 				}
 			} // End of While Loop Fetch
-			// Commit Rest of Insert Doc
-			mongoCollection.bulkWrite(insertDocuments);
 			System.out.println("From Oracle TableName : " +tableName + " / To MongoCollection : " + insertMongoCollectionName+ " / insert count : "+insertCount + " / LastSeqRowNumber :"+lastRowNum);
 
 		} catch (SQLException throwables) {
@@ -284,39 +284,39 @@ public class MigrationToolApplication {
 		/* master table : start */
 		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
 		Map<String,String> map1 = new HashMap<String, String>();
-		map1.put("tableName", "TEST_TABLE");
+		map1.put("tableName", "Profile_Info");
 		map1.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
 		map1.put("targetCollection","stage1ProfileInfo");
 		list.add(map1);
 		
 		Map<String,String> map2 = new HashMap<String, String>();
 		map2.put("tableName", "Profile_Info");
-		map2.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map2.put("whereQuery", " SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
 		map2.put("targetCollection","stage2ProfileInfo");
 		list.add(map2);
 		/* master table end */
 		
 		Map<String,String> map3 = new HashMap<String, String>();
-		map3.put("tableName", "Profile");
-		map3.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map3.put("tableName", "Profile_Setup_Data");
+		map3.put("whereQuery", " SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
 		map3.put("targetCollection","stage1PresentProfileSetup");
 		list.add(map2);
 		
 		Map<String,String> map4 = new HashMap<String, String>();
-		map4.put("tableName", "TEST_TABLE");
-		map4.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map4.put("tableName", "Profile_Setup_Data");
+		map4.put("whereQuery", " SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
 		map4.put("targetCollection","stage2PresentProfileSetup");
 		list.add(map2);
 		
 		Map<String,String> map5 = new HashMap<String, String>();
-		map5.put("tableName", "TEST_TABLE");
-		map5.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map5.put("tableName", "Profile_Setup_Delta");
+		map5.put("whereQuery", " SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
 		map5.put("targetCollection","stage1ChangedProfileSetup");
 		list.add(map5);
 		
 		Map<String,String> map6 = new HashMap<String, String>();
-		map6.put("tableName", "TEST_TABLE");
-		map6.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map6.put("tableName", "Profile_Setup_Delta");
+		map6.put("whereQuery", " SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
 		map6.put("targetCollection","stage2ChangedProfileSetup");
 		list.add(map6);
 		
