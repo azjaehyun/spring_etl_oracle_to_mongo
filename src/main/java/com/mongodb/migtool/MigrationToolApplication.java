@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -60,12 +61,18 @@ public class MigrationToolApplication {
 	@Value("${dbinfo.mongouri}") String mongouri ;
 	@Value("${dbinfo.mongodatabasename}") String mongodatabasename ; 
 	@Value("${dbinfo.mongodatabaseargs}") String mongodatabaseargs ; 
+	@Value("${dbinfo.fromRowNum}") String fromRowNum ; 
+	@Value("${dbinfo.toRowNum}") String toRowNum ; 
+	@Value("${dbinfo.servicetype}") String servicetype ; 
 
 	private static ArrayList<Map<String,String>> tableList = new ArrayList<Map<String,String>>();
 	private static Logger logger = LoggerFactory.getLogger(MigrationToolApplication.class);
 	private static MongoClient mongoClient;
 	private static Connection conn;
 	private static String MONGO_DATABASE_NAME;
+	private static String SERVICE_TYPE;
+	private static String FROM_ROWNUM;
+	private static String TO_ROWNUM;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(MigrationToolApplication.class, args);
@@ -78,6 +85,9 @@ public class MigrationToolApplication {
 			logger.info("Start MigrationToolApplication");
 			logger.info("--------------------------------------------------------------------------------");
 
+			
+			
+			
 			System.out.println("******************************************** ");
 		    System.out.println("***** application.yml properties info  ***** ");
 			Map<String,String> connectionParam = new HashMap<String,String>();
@@ -99,7 +109,17 @@ public class MigrationToolApplication {
 			System.out.println("ORACLE_MONGO_URI_PARAM : "+ mongodatabaseargs);
 			System.out.println("***** application.yml properties info ***** ");
 			System.out.println("******************************************** ");
+			System.out.println("");
+			System.out.println(" >> Service Type :  "+servicetype);
+			System.out.println(" >> From DB RowNum  :  "+fromRowNum);
+			System.out.println(" >> To DB RowNum    :  "+toRowNum);
+			System.out.println("");
+			System.out.println("******************************************** ");
+			
 			MONGO_DATABASE_NAME = mongodatabasename;
+			//SERVICE_TYPE=serviceType.get().toString();
+			FROM_ROWNUM=fromRowNum;
+			TO_ROWNUM=toRowNum;
 			
 			batchInitConnection(connectionParam);
 			batchInitTargetTableSetting();
@@ -259,22 +279,45 @@ public class MigrationToolApplication {
    
 	public  void batchInitTargetTableSetting () throws Exception{
 		
+		/* master table : start */
 		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
 		Map<String,String> map1 = new HashMap<String, String>();
-		map1.put("tableName", "TEST_TABLE");
-		map1.put("whereQuery", "SEQ <=1 ");
+		map1.put("tableName", "Profile_Info");
+		map1.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
 		map1.put("targetCollection","stage1ProfileInfo");
 		list.add(map1);
 		
-//		Map<String,String> map2 = new HashMap<String, String>();
-//		map2.put("tableName", "TEST_TABLE");
-//		map2.put("whereQuery", "test_id <=5 ");
-//		list.add(map2);
-//		
-//		Map<String,String> map3 = new HashMap<String, String>();
-//		map3.put("tableName", "TEST_TABLE");
-//		map3.put("whereQuery", "test_id <=5 ");
-//		list.add(map3);
+		Map<String,String> map2 = new HashMap<String, String>();
+		map2.put("tableName", "Profile_Info");
+		map2.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map2.put("targetCollection","stage2ProfileInfo");
+		list.add(map2);
+		/* master table end */
+		
+		Map<String,String> map3 = new HashMap<String, String>();
+		map3.put("tableName", "Profile");
+		map3.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map3.put("targetCollection","stage1PresentProfileSetup");
+		list.add(map2);
+		
+		Map<String,String> map4 = new HashMap<String, String>();
+		map4.put("tableName", "TEST_TABLE");
+		map4.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map4.put("targetCollection","stage2PresentProfileSetup");
+		list.add(map2);
+		
+		Map<String,String> map5 = new HashMap<String, String>();
+		map5.put("tableName", "TEST_TABLE");
+		map5.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map5.put("targetCollection","stage1ChangedProfileSetup");
+		list.add(map5);
+		
+		Map<String,String> map6 = new HashMap<String, String>();
+		map6.put("tableName", "TEST_TABLE");
+		map6.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+		map6.put("targetCollection","stage2ChangedProfileSetup");
+		list.add(map6);
+		
 		
 		tableList = list;
 	}
@@ -321,10 +364,9 @@ public class MigrationToolApplication {
 			dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
 			dc.append("savedTime",savedTimeVal);
 			dc.append("fileName",buffer.get("FILENAME").toString());
-			// dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString());
+			dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("FILENAME").toString())  :  buffer.get("FILENAME").toString());
 			dc.append("createdDate",buffer.get("RGST_DTM").toString());
-			//dc.append("",);
-
+			
 		
 		}else if("stage2PresentProfileSetup".equals(insertMongoCollectionName)) {
 	   	   
