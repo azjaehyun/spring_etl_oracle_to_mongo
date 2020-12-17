@@ -192,7 +192,7 @@ public class MigrationToolApplication {
 		// Oracle Connect
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		String url = "jdbc:oracle:thin:@"+connectionParam.get("oracleip")+":"+connectionParam.get("oracleport")+":"+connectionParam.get("oracledatabasename");
-		System.out.println("oracle Url : "+url);
+		System.out.println(">> Oracle Url : "+url);
 		String user = connectionParam.get("oracleid");
 		String pwd = connectionParam.get("oraclepw");
 		
@@ -207,7 +207,7 @@ public class MigrationToolApplication {
 				connectionParam.get("mongouri") + connectionParam.get("mongodatabasename") + "?"  +  connectionParam.get("mongodatabaseargs")
 		);
 		
-		System.out.println("mongo connection info : "+connectionString);
+		System.out.println(">> Mongo connection info : "+connectionString);
 		
 		
 		// POJO Object를 등록
