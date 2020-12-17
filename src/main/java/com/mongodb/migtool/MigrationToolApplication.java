@@ -160,7 +160,8 @@ public class MigrationToolApplication {
 			InsertOneModel insertOneModel = null;
 			Document insertDoc = null;
 			List<InsertOneModel> insertDocuments = new ArrayList<>();
-
+			
+			int lastRowNum = 0;
 			while (rs.next()) {
 				buffer = new HashMap<String,Object>();
 				for (int idx = 1; idx < columnCount+1; idx++) {
@@ -169,6 +170,7 @@ public class MigrationToolApplication {
 				    buffer.put(key,  MigUtil.converTypeCasting( columnTypeCode , rs.getObject(idx)));
 				}
 				Document remappingMap = convertTargetDocumentVO(buffer,insertMongoCollectionName , mongoDatabase );
+				lastRowNum = Integer.parseInt(remappingMap.get("seq").toString());
 				insertOneModel = new InsertOneModel(remappingMap);
 				insertDocuments.add(insertOneModel);
 				insertCount++;
@@ -180,7 +182,7 @@ public class MigrationToolApplication {
 			} // End of While Loop Fetch
 			// Commit Rest of Insert Doc
 			mongoCollection.bulkWrite(insertDocuments);
-			System.out.println("From Oracle TableName : " +tableName + " / To MongoCollection : " + insertMongoCollectionName+ " / insert count : "+insertCount);
+			System.out.println("From Oracle TableName : " +tableName + " / To MongoCollection : " + insertMongoCollectionName+ " / insert count : "+insertCount + " / LastSeqRowNumber :"+lastRowNum);
 
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
@@ -282,7 +284,7 @@ public class MigrationToolApplication {
 		/* master table : start */
 		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
 		Map<String,String> map1 = new HashMap<String, String>();
-		map1.put("tableName", "Profile_Info");
+		map1.put("tableName", "TEST_TABLE");
 		map1.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
 		map1.put("targetCollection","stage1ProfileInfo");
 		list.add(map1);
