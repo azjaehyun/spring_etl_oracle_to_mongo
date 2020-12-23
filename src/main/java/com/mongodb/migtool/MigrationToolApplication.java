@@ -421,9 +421,9 @@ public class MigrationToolApplication implements CommandLineRunner {
 		
 		
 		if("6".equals(servicetype)) {
-			Map<String,String> map3 = new HashMap<String, String>();
+			Map<String,String> map3 = new HashMap<String, String>(); // TO_CHAR('YYYYMMDDHH24MISS')
 			map3.put("tableName", "Profile_Setup_Data");
-			map3.put("whereQuery", " ( BETWEEN  INFO_SEQ  "+ FROM_ROWNUM + "AND"+ TO_ROWNUM  +" AND  PROFILE_LEVEL = 1 ) or ( GUBUN=0 and TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') > "+ UPT_DTM +" ) or ( BETWEEN SEQ "+ INFO_FROMSEQ +" AND "+ INFO_TOSEQ +" ) ");
+			map3.put("whereQuery", " ( BETWEEN  INFO_SEQ  "+ FROM_ROWNUM + "AND"+ TO_ROWNUM  +" AND  PROFILE_LEVEL = 1 ) or ( GUBUN=0 and  BETWEEN TO_CHAR(UPT_DTM,'yyyyMMddHH24miss')  "+ FROM_UPT_DTM +" AND "+ TO_UPT_DTM +"  ) or ( BETWEEN SEQ "+ INFO_FROMSEQ +" AND "+ INFO_TOSEQ +" ) ");
 			// SEQ > 20000
 			map3.put("targetCollection","stage1PresentProfileSetup");
 			list.add(map3);
