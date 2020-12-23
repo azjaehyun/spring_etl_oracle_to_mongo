@@ -1,0 +1,55 @@
+sql command 
+INSERT INTO TEST_TABLE ( TEST_ID , TEST_TITLE, TEST_DATE ) VALUES( '1','test' ,sysdate);
+
+BEGIN
+    FOR I IN 1..1000
+    
+    LOOP
+        insert into -- INSERT문
+	        TEST_TABLE (
+	            TEST_ID,
+	            TEST_TITLE,
+	            TEST_DATE
+	        )
+	    values
+	        (
+	            I, -- PK값 증가
+	            to_clob(DBMS_RANDOM.STRING('x', 1000000)),
+	            sysdate
+	        );
+    END LOOP;
+
+END;
+
+
+
+COMMIT;
+
+
+
+--ALTER TABLE TEST_TABLE  logging;
+
+
+INSERT  /*+ append */
+INTO	TEST_TABLE 
+(
+         TEST_ID,
+	            TEST_TITLE,
+	            TEST_DATE
+)
+SELECT  rownum + 1000 AS TEST_ID ,
+        a.TEST_TITLE ,
+        sysdate
+FROM    TEST_TABLE a,
+      ( SELECT LEVEL AS lvl FROM dual CONNECT BY LEVEL <= 1000 ) b;
+
+
+/*
+ SELECT  a.*
+ FROM    DBA_DATA_FILES  a;
+ 
+ALTER DATABASE datafile '/u01/app/oracle/oradata/XE/system.dbf' resize 10 G
+
+*/
+/* free version tablespace total size  11G  */
+

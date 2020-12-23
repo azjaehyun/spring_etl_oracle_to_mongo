@@ -1,0 +1,28 @@
+dbinfo:
+   oracleip: localhost
+   oracleport: 1521
+   oracleid: system
+   oraclepw: oracle
+   oracledatabasename: xe
+   mongouri: mongodb://jaehyun:jaehyun@localhost:27017/
+   mongodatabasename: forum
+   mongodatabaseargs: authMechanism=SCRAM-SHA-1
+   fromRowNum: 1
+   toRowNum: 100
+   servicetype: insert
+
+#spring:
+#  data:
+#    mongodb:
+#      uri: mongodb://admin:admin@localhost:27017,localhost:27018,localhost:27019/test?authSource=admin&replicaSet=replset
+#      database: test
+---
+logging:
+  level:
+    root: info
+    sun.rmi: info
+    org.mongodb: info
+    org.springframework: info
+    com.mongodb.migtool: debug
+    com.zaxxer.hikari: off
+

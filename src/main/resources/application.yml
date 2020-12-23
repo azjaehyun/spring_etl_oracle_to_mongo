@@ -1,15 +1,19 @@
 dbinfo:
-   oracleip: 10.10.19.121
+   oracleip: 10.10.84.150
    oracleport: 1521
-   oracleid: was_iss
-   oraclepw: vit_adm123!
-   oracledatabasename: gen2db
-   mongouri: mongodb://ccs_toRM:!1234ccs_toRM@10.11.52.246:27017,10.11.52.247:27017,10.11.52.248:27017/
+   oracleid: adm_vit
+   oraclepw: "vit_adm123!"
+   oracledatabasename: vitdb
+   mongouri:  mongodb://pcsadm:pcsadm%2100@10.11.63.112:27017,10.11.63.113:27017,10.11.63.114:27017/
    mongodatabasename: ApptxPersonalization
-   mongodatabaseargs: authSource=admin&replicaSet=testReplSet&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+   mongodatabaseargs: replicaSet=PCSReplSet&authSource=admin
    fromRowNum: 1
    toRowNum: 1000
-   servicetype: insert
+   infoTableFromSeq : 929898699
+   infoTableToSeq : 929898699
+   servicetype: "1"
+   fromUptDtm: "20121220071237"
+   toUptDtm : "20121220071237"   
 
 #spring:
 #  data:
@@ -18,6 +22,8 @@ dbinfo:
 #      database: test
 ---
 logging:
+  path: ./
+  file: etl.log
   level:
     root: info
     sun.rmi: info
@@ -25,4 +31,3 @@ logging:
     org.springframework: info
     com.mongodb.migtool: debug
     com.zaxxer.hikari: off
-

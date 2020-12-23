@@ -1,0 +1,31 @@
+dbinfo:
+   oracleip: 10.10.19.121
+   oracleport: 1521
+   oracleid: was_iss
+   oraclepw: "!1234was_iss"
+   oracledatabasename: gen2db
+   mongouri:  mongodb://ccs_toRM:!1234ccs_toRM@10.11.52.246:27017,10.11.52.247:27017,10.11.52.248:27017/ApptxPersonalization
+   mongodatabasename: ApptxPersonalization
+   mongodatabaseargs: authSource=admin&replicaSet=testReplSet&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+   fromRowNum: 1
+   toRowNum: 1000
+   servicetype: "1"
+   uptDtm: "20121220071237"
+   
+
+#spring:
+#  data:
+#    mongodb:
+#      uri: mongodb://admin:admin@localhost:27017,localhost:27018,localhost:27019/test?authSource=admin&replicaSet=replset
+#      database: test
+---
+logging:
+  path: ./
+  file: etl.log
+  level:
+    root: info
+    sun.rmi: info
+    org.mongodb: info
+    org.springframework: info
+    com.mongodb.migtool: debug
+    com.zaxxer.hikari: off

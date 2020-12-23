@@ -8,25 +8,33 @@ import java.sql.Clob;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import javax.xml.bind.DatatypeConverter;
+import java.util.Base64;
+import java.util.Base64.Decoder;
 
 public class MigUtil {
 	
 	
 	public static Object converTypeCasting(int columnTypeCode, Object object) throws Exception {
 		Object value ;
-		if( columnTypeCode == 2005 ){  // oracle clob 2005
-	       value = clobToString( (Clob) object );
-		}else if( columnTypeCode == 93 )  {  // oracle Timestamp
-		  DateFormat df = new SimpleDateFormat("yyyyMMddHH:mm:ss");
-		  value = df.format( object );
-	    
-		}else if( columnTypeCode == 2 ) { // oracle numeric
-			value = Integer.valueOf(((BigDecimal) object).intValue());
-		
+		if(object !=null) {
+			if( columnTypeCode == 2005 ){  // oracle clob 2005
+			       value = clobToString( (Clob) object );
+				}else if( columnTypeCode == 93 )  {  // oracle Timestamp
+					
+				 
+				  DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				  value = df.format( object );
+			    
+				}else if( columnTypeCode == 2 ) { // oracle numeric
+					value = Integer.valueOf(((BigDecimal) object).intValue());
+				
+				}else {
+					value =  object;
+				}
 		}else {
-			value =  object;
+			return "";
 		}
+	
 		return value;
 	}
 	
@@ -48,12 +56,12 @@ public class MigUtil {
 		return strOut.toString();
 	}
 	
-	public static String base64Decoding(String str) {
-		// Decoder decoder = Base64.getDecoder();
-		// byte[] decodedBytes = decoder.decode(str.getBytes());
-		// byte[] decodedBytes = str.getBytes();
-		byte[] decodedBytes = DatatypeConverter.parseBase64Binary(str);		
-		return new String(decodedBytes,StandardCharsets.UTF_8);
+	public static String base64Decoding(String str) throws Exception , IllegalArgumentException {
+		Decoder decoder = Base64.getDecoder();
+		byte[] decodedBytes = decoder.decode(str.getBytes("EUC-KR"));
+		//byte[] decodedBytes = str.getBytes();
+		//byte[] decodedBytes = DatatypeConverter.parseBase64Binary(str);		
+		return new String(decodedBytes);
 	}
 	
 	
