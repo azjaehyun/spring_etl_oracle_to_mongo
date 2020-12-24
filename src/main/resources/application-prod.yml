@@ -3,7 +3,7 @@ dbinfo:
    oracleport: 1521
    oracleid: system
    oraclepw: oracle
-   oracledatabasename: xe
+   oracledatabasename: XE
    mongouri: mongodb://jaehyun:jaehyun@localhost:27017/
    mongodatabasename: forum
    mongodatabaseargs: authMechanism=SCRAM-SHA-1

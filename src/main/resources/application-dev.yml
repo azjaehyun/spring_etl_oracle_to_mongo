@@ -9,8 +9,11 @@ dbinfo:
    mongodatabaseargs: authSource=admin&replicaSet=testReplSet&readPreference=primary&appname=MongoDB%20Compass&ssl=false
    fromRowNum: 1
    toRowNum: 1000
-   servicetype: "1"
-   uptDtm: "20121220071237"
+   infoTableFromSeq : 929898699
+   infoTableToSeq : 929898699
+   servicetype: "0"
+   fromUptDtm: "20121220071237"
+   toUptDtm : "20121220071237"   
    
 
 #spring:

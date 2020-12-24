@@ -43,6 +43,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.InsertOneModel;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.migtool.util.MigUtil;
 
@@ -74,7 +75,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 	@Value("${dbinfo.toRowNum}") String toRowNum ; 
 	@Value("${dbinfo.servicetype}") String servicetype ; 
 	@Value("${dbinfo.fromUptDtm}") String fromUptDtm ;
-	@Value("${dbinfo.ToUptDtm}") String toUptDtm ;
+	@Value("${dbinfo.toUptDtm}") String toUptDtm ;
 	@Value("${dbinfo.infoTableFromSeq}") String infoFromSeq ;
 	@Value("${dbinfo.infoTableToSeq}") String infoToSeq ;
 
@@ -121,7 +122,8 @@ public class MigrationToolApplication implements CommandLineRunner {
 		connectionParam.put("mongouri", mongouri);
 		connectionParam.put("mongodatabasename", mongodatabasename);
 		connectionParam.put("mongodatabaseargs", mongodatabaseargs);
-		connectionParam.put("uptDtm", uptDtm);
+		connectionParam.put("fromUptDtm", fromUptDtm);
+		connectionParam.put("toUptDtm", toUptDtm);
 		connectionParam.put("infoFromSeq", infoFromSeq);
 		connectionParam.put("infoToSeq", infoToSeq);
 		logger.info("dbinfo.oracleip : "+oracleip);
@@ -154,7 +156,8 @@ public class MigrationToolApplication implements CommandLineRunner {
 		MONGO_DATABASE_NAME = mongodatabasename;
 		FROM_ROWNUM=fromRowNum;
 		TO_ROWNUM=toRowNum;
-		UPT_DTM = uptDtm;
+		FROM_UPT_DTM = fromUptDtm;
+		TO_UPT_DTM = toUptDtm;
 		INFO_FROMSEQ = infoFromSeq;
 		INFO_TOSEQ = infoToSeq;
 		SERVICE_TYPE = servicetype;
@@ -183,16 +186,23 @@ public class MigrationToolApplication implements CommandLineRunner {
 		StringBuilder sqlString = new StringBuilder()
 				.append("SELECT * FROM  ").append(tableName).append(" where 1=1 and ").append(whereQuery);
 		
-	
+		StringBuilder sqlStringCNT = new StringBuilder()
+				.append("SELECT COUNT(*) FROM  ").append(tableName).append(" where 1=1 and ").append(whereQuery);
 		
 		
 		try {
 			logger.info("Fetch Execute Query :: "+sqlString.toString());
+			logger.info("Fetch Execute Query CNT :: "+sqlStringCNT.toString());
 			PreparedStatement psmt = conn.prepareStatement(sqlString.toString());
+			PreparedStatement psmtCnt = conn.prepareStatement(sqlStringCNT.toString());
 			//PreparedStatement psmtCnt = conn.prepareStatement(sqlCnt.toString());
 			// TODO : Set Fetch Count or Limit 1000 Loops
 			ResultSet rs = psmt.executeQuery();
+			ResultSet rsCnt = psmtCnt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
+			while (rsCnt.next()) {
+				logger.info("Fetch Cnt : "+ rsCnt.getObject(1));
+			}
 			
 			int columnCount = rsmd.getColumnCount();
 			int insertCount = 0;
@@ -251,12 +261,16 @@ public class MigrationToolApplication implements CommandLineRunner {
 					    buffer.put(key,  MigUtil.converTypeCasting( columnTypeCode , rs.getObject(idx)));
 					}
 					if(SERVICE_TYPE.equals("4")) {
+						logger.info(" >> stage2ProfileInfoCollectionDupCheck start " );
 						stage1ProfileInfoCollectionDupCheck(buffer,insertMongoCollectionName , mongoDatabase);
 					}else if(SERVICE_TYPE.equals("5")) {
+						logger.info(" >> stage2ProfileInfoCollectionDupCheck start " );
 						stage2ProfileInfoCollectionDupCheck(buffer,insertMongoCollectionName , mongoDatabase);
 					}else if(SERVICE_TYPE.equals("6")) {
+						logger.info(" >> stage1ProfileSetupCollectionSync start " );
 						stage1ProfileSetupCollectionSync(buffer,insertMongoCollectionName , mongoDatabase);
 					}else if(SERVICE_TYPE.equals("7")) {
+						logger.info(" >> stage2ProfileSetupCollectionSync start " );
 						stage2ProfileSetupCollectionSync(buffer,insertMongoCollectionName , mongoDatabase);
 					}
 				} // End of While Loop Fetch
@@ -384,7 +398,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 		if("2".equals(servicetype)) {
 			Map<String,String> map3 = new HashMap<String, String>();
 			map3.put("tableName", "Profile_Setup_Data");
-			map3.put("whereQuery", " INFO_SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= "+UPT_DTM + "  ");
+			map3.put("whereQuery", " INFO_SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= "+TO_UPT_DTM + "  ");
 			map3.put("targetCollection","stage1PresentProfileSetup");
 			list.add(map3);
 		}
@@ -423,7 +437,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 		if("6".equals(servicetype)) {
 			Map<String,String> map3 = new HashMap<String, String>(); // TO_CHAR('YYYYMMDDHH24MISS')
 			map3.put("tableName", "Profile_Setup_Data");
-			map3.put("whereQuery", " ( BETWEEN  INFO_SEQ  "+ FROM_ROWNUM + "AND"+ TO_ROWNUM  +" AND  PROFILE_LEVEL = 1 ) or ( GUBUN=0 and  BETWEEN TO_CHAR(UPT_DTM,'yyyyMMddHH24miss')  "+ FROM_UPT_DTM +" AND "+ TO_UPT_DTM +"  ) or ( BETWEEN SEQ "+ INFO_FROMSEQ +" AND "+ INFO_TOSEQ +" ) ");
+			map3.put("whereQuery", " ( INFO_SEQ BETWEEN "+ FROM_ROWNUM + " AND "+ TO_ROWNUM  +" AND  PROFILE_LEVEL = 1 ) or ( GUBUN=0 and TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') BETWEEN  "+ FROM_UPT_DTM +" AND "+ TO_UPT_DTM +"  ) or ( SEQ BETWEEN  "+ INFO_FROMSEQ +" AND "+ INFO_TOSEQ +" ) ");
 			// SEQ > 20000
 			map3.put("targetCollection","stage1PresentProfileSetup");
 			list.add(map3);
@@ -432,7 +446,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 		if("7".equals(servicetype)) {
 			Map<String,String> map4 = new HashMap<String, String>();
 			map4.put("tableName", "Profile_Setup_Data");
-			map4.put("whereQuery", " INFO_SEQ > "+ TO_ROWNUM +"  AND PROFILE_LEVEL = 2  AND GUBUN = 1 ");
+			map4.put("whereQuery", " INFO_SEQ BETWEEN  "+ FROM_ROWNUM +"  AND "+TO_ROWNUM +" PROFILE_LEVEL = 2  AND GUBUN = 1 ");
 			map4.put("targetCollection","stage2PresentProfileSetup");
 			list.add(map4);
 		}
@@ -717,27 +731,31 @@ public class MigrationToolApplication implements CommandLineRunner {
 		Map<String,Object> idSet = new HashMap<String,Object>();
 		Map<String,Object> savedTimeVal = new HashMap<String,Object>();
 		
-		Bson filter = Filters.eq("seq",buffer.get("INFO_SEQ"));
+		Bson filter = Filters.eq("seq",buffer.get("INFO_SEQ").toString());
 		Bson sort = Sorts.descending("seq");
 		MongoCollection mongoCollection = mongoDatabase.getCollection("stage1ProfileInfo");
-		
+		logger.info("stage1ProfileSetup Search seq : "+buffer.get("INFO_SEQ").toString());
 		FindIterable<Document> resultObj =   mongoCollection.find(filter  ).sort(sort);
 	    
 		if(resultObj.first() !=null) {
 			Map<String,Object> map = new HashMap<String,Object>();
 			String mongoInfoObjectId =  resultObj.first().get("_id").toString();
 			map.put("profileInfoId", new ObjectId(mongoInfoObjectId) );
-			map.put("category", buffer.get("CATEGORY").toString()  );
 			map.put("isBackupRecord", "0".equals(buffer.get("GUBUN").toString()) ? Boolean.TRUE : Boolean.FALSE  );
+			map.put("category", buffer.get("CATEGORY").toString()  );
 			
 			
 			Bson searchProfileSetupObjectId = Filters.eq("_id",map);
 			MongoCollection mongoCollection2 = mongoDatabase.getCollection("stage1PresentProfileSetup");
+			logger.info("stage1PresentProfileSetup Search _id : "+map);
 			FindIterable<Document> resultObj2  = mongoCollection2.find(searchProfileSetupObjectId);
 			if( resultObj2.first() !=null ) {   // 변경된 마스터 아이디를 가져와서~
 				// 그냥 무조건 지우고 insert
-				Bson deleteParam = Filters.eq("_id",searchProfileSetupObjectId);
-				mongoCollection2.deleteOne(deleteParam);
+				//Bson deleteParam = Filters.eq("_id",searchProfileSetupObjectId);
+				// mongoCollection2.deleteOne(deleteParam);
+			
+				UpdateOptions updateOptions = new UpdateOptions().upsert(true);
+				
 				logger.info("stage1ProfileSetup delete : "+searchProfileSetupObjectId);
 				idSet.put("profileInfoId", new ObjectId( mongoInfoObjectId ) );
 			    idSet.put("category", buffer.get("CATEGORY").toString()  );
@@ -746,6 +764,40 @@ public class MigrationToolApplication implements CommandLineRunner {
 				savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
 				savedTimeVal.put("offset", buffer.get("UTC_OFFSET").toString()  );
 				
+			
+				// dc.append("_id",idSet);
+				dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
+				dc.append("savedTime",savedTimeVal);
+				dc.append("fileName",buffer.get("FILENAME").toString());
+				if(buffer.get("SETUP_FILE")!=null) {
+					try {
+						dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("SETUP_FILE").toString())  :  buffer.get("SETUP_FILE").toString());
+					} catch (IllegalArgumentException e) {
+						//e.printStackTrace();
+						logger.info("stage1PresentProfileSetup IllegalArgumentException INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
+							
+					} catch (Exception e) {
+						logger.info("stage1PresentProfileSetup Exception INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
+						//e.printStackTrace();
+								
+					}
+				}
+				if(buffer.get("RGST_DTM")!=null) {
+					dc.append("createDate",buffer.get("RGST_DTM").toString());
+				}
+				logger.info("stage1PresentProfileSetup update _id : "+idSet);
+				mongoCollection2.updateOne(new Document().append("_id", idSet ) ,new Document().append("$set",dc),updateOptions);
+				logger.info("stage1ProfileSetup insert  : "+searchProfileSetupObjectId);
+			}else {
+				
+				idSet.put("profileInfoId", new ObjectId( mongoInfoObjectId ) );
+			    idSet.put("category", buffer.get("CATEGORY").toString()  );
+			    idSet.put("isBackupRecord", "0".equals(buffer.get("GUBUN").toString()) ? Boolean.TRUE : Boolean.FALSE  );
+				
+				savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
+				savedTimeVal.put("offset", buffer.get("UTC_OFFSET").toString()  );
+				
+			
 				dc.append("_id",idSet);
 				dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
 				dc.append("savedTime",savedTimeVal);
@@ -766,9 +818,12 @@ public class MigrationToolApplication implements CommandLineRunner {
 				if(buffer.get("RGST_DTM")!=null) {
 					dc.append("createDate",buffer.get("RGST_DTM").toString());
 				}
+				
 				mongoCollection2.insertOne(dc);
-				logger.info("stage1ProfileSetup insert  : "+searchProfileSetupObjectId);
+				logger.info("stage1ProfileSetup insert");
+				
 			}
+			
 		}
 		
 		
@@ -786,7 +841,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 		Bson filter = Filters.eq("seq",buffer.get("INFO_SEQ"));
 		Bson sort = Sorts.descending("seq");
 		MongoCollection mongoCollection = mongoDatabase.getCollection("stage2ProfileInfo");
-		
+		logger.info("stage2ProfileSetup Search seq : "+buffer.get("INFO_SEQ").toString());
 		FindIterable<Document> resultObj =   mongoCollection.find(filter  ).sort(sort);
 	    
 		if(resultObj.first() !=null) {
@@ -799,12 +854,44 @@ public class MigrationToolApplication implements CommandLineRunner {
 			
 			Bson searchProfileSetupObjectId = Filters.eq("_id",map);
 			MongoCollection mongoCollection2 = mongoDatabase.getCollection("stage2PresentProfileSetup");
+			logger.info("stage2PresentProfileSetup Search _id : "+map);
 			FindIterable<Document> resultObj2  = mongoCollection2.find(searchProfileSetupObjectId);
+			UpdateOptions updateOptions = new UpdateOptions().upsert(true);
+		
 			if( resultObj2.first() !=null ) {   // 변경된 마스터 아이디를 가져와서~
+				
 				// 그냥 무조건 지우고 insert
-				Bson deleteParam = Filters.eq("_id",searchProfileSetupObjectId);
-				mongoCollection2.deleteOne(deleteParam);
-				logger.info("stage2ProfileSetup delete : "+searchProfileSetupObjectId);
+				//Bson deleteParam = Filters.eq("_id",searchProfileSetupObjectId);
+				//mongoCollection2.deleteOne(deleteParam);
+				idSet.put("profileInfoId",  new ObjectId( mongoInfoObjectId ) );
+			    idSet.put("category", buffer.get("CATEGORY").toString()  );
+				savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
+				savedTimeVal.put("offset", buffer.get("UTC_OFFSET").toString()  );
+				
+				// dc.append("_id",idSet);
+				dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
+				dc.append("savedTime",savedTimeVal);
+				dc.append("fileName",buffer.get("FILENAME").toString());
+				if(buffer.get("SETUP_FILE")!=null) {
+					try {
+						dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("SETUP_FILE").toString())  :  buffer.get("SETUP_FILE").toString());
+					} catch (IllegalArgumentException e) {
+						//e.printStackTrace();
+						logger.info("stage1PresentProfileSetup IllegalArgumentException INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
+							
+					} catch (Exception e) {
+						logger.info("stage1PresentProfileSetup Exception INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
+						//e.printStackTrace();
+								
+					}
+				}
+				if(buffer.get("RGST_DTM")!=null) {
+					dc.append("createDate",buffer.get("RGST_DTM").toString());
+				}
+			
+				mongoCollection2.updateOne(new Document().append("_id", idSet ) ,new Document().append("$set",dc),updateOptions);
+				logger.info("stage2ProfileSetup insert : "+searchProfileSetupObjectId);
+			}else {
 				idSet.put("profileInfoId",  new ObjectId( mongoInfoObjectId ) );
 			    idSet.put("category", buffer.get("CATEGORY").toString()  );
 				savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );

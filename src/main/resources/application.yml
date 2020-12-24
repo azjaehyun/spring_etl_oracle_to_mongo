@@ -11,7 +11,7 @@ dbinfo:
    toRowNum: 1000
    infoTableFromSeq : 929898699
    infoTableToSeq : 929898699
-   servicetype: "6"
+   servicetype: "0"
    fromUptDtm: "20121220071237"
    toUptDtm : "20121220071237"   
 
