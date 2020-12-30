@@ -1,36 +1,44 @@
-2020-12-23 11:58:52.443  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : Starting MigrationToolApplication on HMC-UW-N040769 with PID 9776 (D:\workspace\spring_etl_oracle_to_mongo\target\classes started by H2007118 in D:\workspace\spring_etl_oracle_to_mongo)
-2020-12-23 11:58:52.452 DEBUG 9776 --- [main] c.m.migtool.MigrationToolApplication     : Running with Spring Boot v2.2.9.BUILD-SNAPSHOT, Spring v5.2.8.RELEASE
-2020-12-23 11:58:52.453  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : The following profiles are active: dev
-2020-12-23 11:58:52.844  INFO 9776 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2020-12-23 11:58:52.877  INFO 9776 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28ms. Found 0 MongoDB repository interfaces.
-2020-12-23 11:58:53.012  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : -----------------test---------------------------------------------------------------
-2020-12-23 11:58:53.124  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : Started MigrationToolApplication in 1.049 seconds (JVM running for 1.98)
-2020-12-23 11:58:53.126  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 11:58:53.127  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : Start MigrationToolApplication
-2020-12-23 11:58:53.127  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 11:58:53.127  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 11:58:53.127  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info  ***** 
-2020-12-23 11:58:53.127  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleip : 10.10.19.121
-2020-12-23 11:58:53.127  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleport : 1521
-2020-12-23 11:58:53.127  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleid : was_iss
-2020-12-23 11:58:53.127  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oraclepw : [!1234was_iss]
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracledatabasename : gen2db
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongouri : mongodb://ccs_toRM:!1234ccs_toRM@10.11.52.246:27017,10.11.52.247:27017,10.11.52.248:27017/ApptxPersonalization
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabasename : ApptxPersonalization
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabaseargs : authSource=admin&replicaSet=testReplSet&readPreference=primary&appname=MongoDB%20Compass&ssl=false
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.servicetype : 2
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.uptDtm : 20121220071237
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info ***** 
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 11:58:53.128  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 11:58:53.129  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     :  >> Service Type :  2
-2020-12-23 11:58:53.129  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     :  >> From DB RowNum  :  1
-2020-12-23 11:58:53.129  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     :  >> To DB RowNum    :  1000
-2020-12-23 11:58:53.129  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     :  >> uptDtm   :  20121220071237
-2020-12-23 11:58:53.129  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 11:58:53.129  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 11:58:53.130  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : >> Oracle Url : jdbc:oracle:thin:@10.10.19.121:1521/gen2db
-2020-12-23 11:59:14.184 ERROR 9776 --- [main] c.m.migtool.MigrationToolApplication     : IO 오류: The Network Adapter could not establish the connection
+2020-12-30 10:31:45.116  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : Starting MigrationToolApplication on HMC-UW-N040769 with PID 15704 (D:\workspace\spring_etl_oracle_to_mongo\target\classes started by H2007118 in D:\workspace\spring_etl_oracle_to_mongo)
+2020-12-30 10:31:45.116 DEBUG 15704 --- [main] c.m.migtool.MigrationToolApplication     : Running with Spring Boot v2.2.9.BUILD-SNAPSHOT, Spring v5.2.8.RELEASE
+2020-12-30 10:31:45.116  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : The following profiles are active: prod
+2020-12-30 10:31:45.491  INFO 15704 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2020-12-30 10:31:45.523  INFO 15704 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14ms. Found 0 MongoDB repository interfaces.
+2020-12-30 10:31:45.632  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : -----------------test---------------------------------------------------------------
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : Started MigrationToolApplication in 1.034 seconds (JVM running for 2.252)
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : Start MigrationToolApplication
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info  ***** 
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleip : localhost
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleport : 1521
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleid : system
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oraclepw : [oracle]
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracledatabasename : XE
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongouri : mongodb://jaehyun:jaehyun@localhost:27017/
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabasename : forum
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabaseargs : authMechanism=SCRAM-SHA-1
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.servicetype : 2
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.fromUptDtm : 20121220071237
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.toUptDtm : 20121220071237
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoFromSeq : 929898699
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoToSeq : 929898699
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.bulkUpdateYn : N
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info ***** 
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : 
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     :  >> Service Type :  2
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     :  >> From DB RowNum  :  1
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     :  >> To DB RowNum    :  1000
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     :  >> fromUptDtm   :  20121220071237
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     :  >> toUptDtm   :  20121220071237
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoFromSeq   :  929898699
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoToSeq   :  929898699
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     :  >> bulkUpdateYn   :  N
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : 
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
+2020-12-30 10:31:45.741  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : >> Oracle Url : jdbc:oracle:thin:@localhost:1521/XE
+2020-12-30 10:31:47.850 ERROR 15704 --- [main] c.m.migtool.MigrationToolApplication     : IO 오류: The Network Adapter could not establish the connection
 
 java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not establish the connection
 	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:458) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
@@ -40,329 +48,15 @@ java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not estab
 	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:521) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
 	at java.sql.DriverManager.getConnection(DriverManager.java:664) ~[na:1.8.0_271]
 	at java.sql.DriverManager.getConnection(DriverManager.java:247) ~[na:1.8.0_271]
-	at com.mongodb.migtool.MigrationToolApplication.getConnection(MigrationToolApplication.java:334) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.batchInitConnection(MigrationToolApplication.java:288) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:146) [classes/:na]
+	at com.mongodb.migtool.MigrationToolApplication.getConnection(MigrationToolApplication.java:447) [classes/:na]
+	at com.mongodb.migtool.MigrationToolApplication.batchInitConnection(MigrationToolApplication.java:401) [classes/:na]
+	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:172) [classes/:na]
 	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
 	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:92) [classes/:na]
-Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection
-	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:392) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:434) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.ns.NSProtocol.establishConnection(NSProtocol.java:687) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.ns.NSProtocol.connect(NSProtocol.java:247) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:1102) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:320) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	... 15 common frames omitted
-Caused by: java.net.ConnectException: Connection timed out: connect
-	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method) ~[na:1.8.0_271]
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:81) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:476) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:218) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:200) ~[na:1.8.0_271]
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:162) ~[na:1.8.0_271]
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:394) ~[na:1.8.0_271]
-	at java.net.Socket.connect(Socket.java:606) ~[na:1.8.0_271]
-	at oracle.net.nt.TcpNTAdapter.connect(TcpNTAdapter.java:150) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.nt.ConnOption.connect(ConnOption.java:133) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:370) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	... 20 common frames omitted
-
-2020-12-23 11:59:14.194  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : >> Mongo connection info : mongodb://ccs_toRM:!1234ccs_toRM@10.11.52.246:27017,10.11.52.247:27017,10.11.52.248:27017/ApptxPersonalizationApptxPersonalization?authSource=admin&replicaSet=testReplSet&readPreference=primary&appname=MongoDB%20Compass&ssl=false
-2020-12-23 11:59:14.300  INFO 9776 --- [main] org.mongodb.driver.cluster               : Cluster created with settings {hosts=[10.11.52.246:27017, 10.11.52.247:27017, 10.11.52.248:27017], mode=MULTIPLE, requiredClusterType=REPLICA_SET, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500, requiredReplicaSetName='testReplSet'}
-2020-12-23 11:59:14.301  INFO 9776 --- [main] org.mongodb.driver.cluster               : Adding discovered server 10.11.52.246:27017 to client view of cluster
-2020-12-23 11:59:14.326  INFO 9776 --- [main] org.mongodb.driver.cluster               : Adding discovered server 10.11.52.247:27017 to client view of cluster
-2020-12-23 11:59:14.328  INFO 9776 --- [main] org.mongodb.driver.cluster               : Adding discovered server 10.11.52.248:27017 to client view of cluster
-2020-12-23 11:59:14.337  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : Fetch Execute Query :: SELECT * FROM  Profile_Setup_Data where 1=1 and  INFO_SEQ BETWEEN 1 AND 1000 AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= 20121220071237  
-2020-12-23 11:59:14.339  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 11:59:14.339  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : MigrationToolApplication Finished
-2020-12-23 11:59:14.339  INFO 9776 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 11:59:14.344  INFO 9776 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2020-12-23 11:59:14.383  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.248:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:3, serverValue:923241}] to 10.11.52.248:27017
-2020-12-23 11:59:14.384  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.247:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:2, serverValue:973594}] to 10.11.52.247:27017
-2020-12-23 11:59:14.384  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.246:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1, serverValue:73825}] to 10.11.52.246:27017
-2020-12-23 11:59:14.382 ERROR 9776 --- [main] o.s.boot.SpringApplication               : Application run failed
-
-java.lang.IllegalStateException: Failed to execute CommandLineRunner
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:92) [classes/:na]
-Caused by: java.lang.NullPointerException: null
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:155) [classes/:na]
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	... 5 common frames omitted
-
-2020-12-23 11:59:14.392  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.247:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=10.11.52.247:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=5342400, setName='testReplSet', canonicalAddress=10.11.52.247:27017, hosts=[10.11.52.248:27017, 10.11.52.246:27017, 10.11.52.247:27017], passives=[], arbiters=[], primary='10.11.52.248:27017', tagSet=TagSet{[]}, electionId=null, setVersion=2, lastWriteDate=Wed Dec 23 11:59:05 KST 2020, lastUpdateTimeNanos=176996691682000}
-2020-12-23 11:59:14.394  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.246:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=10.11.52.246:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=9372300, setName='testReplSet', canonicalAddress=10.11.52.246:27017, hosts=[10.11.52.248:27017, 10.11.52.246:27017, 10.11.52.247:27017], passives=[], arbiters=[], primary='10.11.52.248:27017', tagSet=TagSet{[]}, electionId=null, setVersion=2, lastWriteDate=Wed Dec 23 11:59:05 KST 2020, lastUpdateTimeNanos=176996694418900}
-2020-12-23 11:59:14.394  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.248:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=10.11.52.248:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=9547200, setName='testReplSet', canonicalAddress=10.11.52.248:27017, hosts=[10.11.52.248:27017, 10.11.52.246:27017, 10.11.52.247:27017], passives=[], arbiters=[], primary='10.11.52.248:27017', tagSet=TagSet{[]}, electionId=7fffffff0000000000000139, setVersion=2, lastWriteDate=Wed Dec 23 11:59:05 KST 2020, lastUpdateTimeNanos=176996694552700}
-2020-12-23 11:59:14.395  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.248:27017] org.mongodb.driver.cluster               : Setting max election id to 7fffffff0000000000000139 from replica set primary 10.11.52.248:27017
-2020-12-23 11:59:14.395  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.248:27017] org.mongodb.driver.cluster               : Setting max set version to 2 from replica set primary 10.11.52.248:27017
-2020-12-23 11:59:14.396  INFO 9776 --- [cluster-ClusterId{value='5fe2b2829b52ba7a7cfdb0f6', description='null'}-10.11.52.248:27017] org.mongodb.driver.cluster               : Discovered replica set primary 10.11.52.248:27017
-2020-12-23 17:11:27.496  INFO 6996 --- [main] c.m.migtool.MigrationToolApplication     : Starting MigrationToolApplication on HMC-UW-N040769 with PID 6996 (D:\workspace\spring_etl_oracle_to_mongo\target\classes started by H2007118 in D:\workspace\spring_etl_oracle_to_mongo)
-2020-12-23 17:11:27.499 DEBUG 6996 --- [main] c.m.migtool.MigrationToolApplication     : Running with Spring Boot v2.2.9.BUILD-SNAPSHOT, Spring v5.2.8.RELEASE
-2020-12-23 17:11:27.499  INFO 6996 --- [main] c.m.migtool.MigrationToolApplication     : The following profiles are active: dev
-2020-12-23 17:11:27.958  INFO 6996 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2020-12-23 17:11:28.007  INFO 6996 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 44ms. Found 0 MongoDB repository interfaces.
-2020-12-23 17:11:28.146  WARN 6996 --- [main] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'migrationToolApplication': Injection of autowired dependencies failed; nested exception is java.lang.IllegalArgumentException: Could not resolve placeholder 'dbinfo.ToUptDtm' in value "${dbinfo.ToUptDtm}"
-2020-12-23 17:11:28.153  INFO 6996 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2020-12-23 17:11:28.162 ERROR 6996 --- [main] o.s.boot.SpringApplication               : Application run failed
-
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'migrationToolApplication': Injection of autowired dependencies failed; nested exception is java.lang.IllegalArgumentException: Could not resolve placeholder 'dbinfo.ToUptDtm' in value "${dbinfo.ToUptDtm}"
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:405) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1420) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:593) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:516) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:324) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:226) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:322) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:897) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:879) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:551) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:747) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:315) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
-Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'dbinfo.ToUptDtm' in value "${dbinfo.ToUptDtm}"
-	at org.springframework.util.PropertyPlaceholderHelper.parseStringValue(PropertyPlaceholderHelper.java:178) ~[spring-core-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.util.PropertyPlaceholderHelper.replacePlaceholders(PropertyPlaceholderHelper.java:124) ~[spring-core-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.core.env.AbstractPropertyResolver.doResolvePlaceholders(AbstractPropertyResolver.java:239) ~[spring-core-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.core.env.AbstractPropertyResolver.resolveRequiredPlaceholders(AbstractPropertyResolver.java:210) ~[spring-core-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.context.support.PropertySourcesPlaceholderConfigurer.lambda$processProperties$0(PropertySourcesPlaceholderConfigurer.java:175) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveEmbeddedValue(AbstractBeanFactory.java:918) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1248) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1227) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:640) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:130) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:399) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	... 16 common frames omitted
-
-2020-12-23 17:18:38.887  INFO 13772 --- [main] c.m.migtool.MigrationToolApplication     : Starting MigrationToolApplication on HMC-UW-N040769 with PID 13772 (D:\workspace\spring_etl_oracle_to_mongo\target\classes started by H2007118 in D:\workspace\spring_etl_oracle_to_mongo)
-2020-12-23 17:18:38.891 DEBUG 13772 --- [main] c.m.migtool.MigrationToolApplication     : Running with Spring Boot v2.2.9.BUILD-SNAPSHOT, Spring v5.2.8.RELEASE
-2020-12-23 17:18:38.892  INFO 13772 --- [main] c.m.migtool.MigrationToolApplication     : The following profiles are active: dev
-2020-12-23 17:18:39.311  INFO 13772 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2020-12-23 17:18:39.335  INFO 13772 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19ms. Found 0 MongoDB repository interfaces.
-2020-12-23 17:18:39.462  WARN 13772 --- [main] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'migrationToolApplication': Injection of autowired dependencies failed; nested exception is java.lang.IllegalArgumentException: Could not resolve placeholder 'dbinfo.ToUptDtm' in value "${dbinfo.ToUptDtm}"
-2020-12-23 17:18:39.469  INFO 13772 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2020-12-23 17:18:39.478 ERROR 13772 --- [main] o.s.boot.SpringApplication               : Application run failed
-
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'migrationToolApplication': Injection of autowired dependencies failed; nested exception is java.lang.IllegalArgumentException: Could not resolve placeholder 'dbinfo.ToUptDtm' in value "${dbinfo.ToUptDtm}"
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:405) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1420) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:593) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:516) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:324) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:226) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:322) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:897) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:879) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:551) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:747) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:315) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
-Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'dbinfo.ToUptDtm' in value "${dbinfo.ToUptDtm}"
-	at org.springframework.util.PropertyPlaceholderHelper.parseStringValue(PropertyPlaceholderHelper.java:178) ~[spring-core-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.util.PropertyPlaceholderHelper.replacePlaceholders(PropertyPlaceholderHelper.java:124) ~[spring-core-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.core.env.AbstractPropertyResolver.doResolvePlaceholders(AbstractPropertyResolver.java:239) ~[spring-core-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.core.env.AbstractPropertyResolver.resolveRequiredPlaceholders(AbstractPropertyResolver.java:210) ~[spring-core-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.context.support.PropertySourcesPlaceholderConfigurer.lambda$processProperties$0(PropertySourcesPlaceholderConfigurer.java:175) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveEmbeddedValue(AbstractBeanFactory.java:918) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1248) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1227) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:640) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:130) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:399) ~[spring-beans-5.2.8.RELEASE.jar:5.2.8.RELEASE]
-	... 16 common frames omitted
-
-2020-12-23 17:19:03.495  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : Starting MigrationToolApplication on HMC-UW-N040769 with PID 13132 (D:\workspace\spring_etl_oracle_to_mongo\target\classes started by H2007118 in D:\workspace\spring_etl_oracle_to_mongo)
-2020-12-23 17:19:03.498 DEBUG 13132 --- [main] c.m.migtool.MigrationToolApplication     : Running with Spring Boot v2.2.9.BUILD-SNAPSHOT, Spring v5.2.8.RELEASE
-2020-12-23 17:19:03.499  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : The following profiles are active: dev
-2020-12-23 17:19:03.854  INFO 13132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2020-12-23 17:19:03.873  INFO 13132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14ms. Found 0 MongoDB repository interfaces.
-2020-12-23 17:19:03.995  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : -----------------test---------------------------------------------------------------
-2020-12-23 17:19:04.116  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : Started MigrationToolApplication in 0.979 seconds (JVM running for 1.858)
-2020-12-23 17:19:04.117  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : Start MigrationToolApplication
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info  ***** 
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleip : 10.10.19.121
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleport : 1521
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleid : was_iss
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oraclepw : [!1234was_iss]
-2020-12-23 17:19:04.118  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracledatabasename : gen2db
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongouri : mongodb://ccs_toRM:!1234ccs_toRM@10.11.52.246:27017,10.11.52.247:27017,10.11.52.248:27017/ApptxPersonalization
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabasename : ApptxPersonalization
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabaseargs : authSource=admin&replicaSet=testReplSet&readPreference=primary&appname=MongoDB%20Compass&ssl=false
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.servicetype : 2
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.fromUptDtm : 20121220071237
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.toUptDtm : 20121220071237
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoFromSeq : 929898699
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoToSeq : 929898699
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info ***** 
-2020-12-23 17:19:04.119  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     :  >> Service Type :  2
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     :  >> From DB RowNum  :  1
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     :  >> To DB RowNum    :  1000
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     :  >> fromUptDtm   :  20121220071237
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     :  >> toUptDtm   :  20121220071237
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoFromSeq   :  929898699
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoToSeq   :  929898699
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:19:04.120  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : >> Oracle Url : jdbc:oracle:thin:@10.10.19.121:1521/gen2db
-2020-12-23 17:19:25.173 ERROR 13132 --- [main] c.m.migtool.MigrationToolApplication     : IO 오류: The Network Adapter could not establish the connection
-
-java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not establish the connection
-	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:458) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:546) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:236) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:32) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:521) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at java.sql.DriverManager.getConnection(DriverManager.java:664) ~[na:1.8.0_271]
-	at java.sql.DriverManager.getConnection(DriverManager.java:247) ~[na:1.8.0_271]
-	at com.mongodb.migtool.MigrationToolApplication.getConnection(MigrationToolApplication.java:352) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.batchInitConnection(MigrationToolApplication.java:306) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:164) [classes/:na]
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
-Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection
-	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:392) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:434) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.ns.NSProtocol.establishConnection(NSProtocol.java:687) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.ns.NSProtocol.connect(NSProtocol.java:247) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:1102) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:320) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	... 15 common frames omitted
-Caused by: java.net.ConnectException: Connection timed out: connect
-	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method) ~[na:1.8.0_271]
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:81) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:476) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:218) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:200) ~[na:1.8.0_271]
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:162) ~[na:1.8.0_271]
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:394) ~[na:1.8.0_271]
-	at java.net.Socket.connect(Socket.java:606) ~[na:1.8.0_271]
-	at oracle.net.nt.TcpNTAdapter.connect(TcpNTAdapter.java:150) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.nt.ConnOption.connect(ConnOption.java:133) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:370) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	... 20 common frames omitted
-
-2020-12-23 17:19:25.189  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : >> Mongo connection info : mongodb://ccs_toRM:!1234ccs_toRM@10.11.52.246:27017,10.11.52.247:27017,10.11.52.248:27017/ApptxPersonalizationApptxPersonalization?authSource=admin&replicaSet=testReplSet&readPreference=primary&appname=MongoDB%20Compass&ssl=false
-2020-12-23 17:19:25.308  INFO 13132 --- [main] org.mongodb.driver.cluster               : Cluster created with settings {hosts=[10.11.52.246:27017, 10.11.52.247:27017, 10.11.52.248:27017], mode=MULTIPLE, requiredClusterType=REPLICA_SET, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500, requiredReplicaSetName='testReplSet'}
-2020-12-23 17:19:25.308  INFO 13132 --- [main] org.mongodb.driver.cluster               : Adding discovered server 10.11.52.246:27017 to client view of cluster
-2020-12-23 17:19:25.339  INFO 13132 --- [main] org.mongodb.driver.cluster               : Adding discovered server 10.11.52.247:27017 to client view of cluster
-2020-12-23 17:19:25.343  INFO 13132 --- [main] org.mongodb.driver.cluster               : Adding discovered server 10.11.52.248:27017 to client view of cluster
-2020-12-23 17:19:25.351  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : Fetch Execute Query :: SELECT * FROM  Profile_Setup_Data where 1=1 and  INFO_SEQ BETWEEN 1 AND 1000 AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= 20121220071237  
-2020-12-23 17:19:25.352  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:19:25.353  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : MigrationToolApplication Finished
-2020-12-23 17:19:25.354  INFO 13132 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:19:25.360  INFO 13132 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2020-12-23 17:19:25.382 ERROR 13132 --- [main] o.s.boot.SpringApplication               : Application run failed
-
-java.lang.IllegalStateException: Failed to execute CommandLineRunner
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
-Caused by: java.lang.NullPointerException: null
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:173) [classes/:na]
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	... 5 common frames omitted
-
-2020-12-23 17:19:25.395  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.246:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1, serverValue:75253}] to 10.11.52.246:27017
-2020-12-23 17:19:25.395  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.247:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:2, serverValue:975022}] to 10.11.52.247:27017
-2020-12-23 17:19:25.396  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.248:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:3, serverValue:924728}] to 10.11.52.248:27017
-2020-12-23 17:19:25.407  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.247:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=10.11.52.247:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=7166400, setName='testReplSet', canonicalAddress=10.11.52.247:27017, hosts=[10.11.52.248:27017, 10.11.52.246:27017, 10.11.52.247:27017], passives=[], arbiters=[], primary='10.11.52.248:27017', tagSet=TagSet{[]}, electionId=null, setVersion=2, lastWriteDate=Wed Dec 23 17:19:15 KST 2020, lastUpdateTimeNanos=196207577985900}
-2020-12-23 17:19:25.409  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.246:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=10.11.52.246:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=9960600, setName='testReplSet', canonicalAddress=10.11.52.246:27017, hosts=[10.11.52.248:27017, 10.11.52.246:27017, 10.11.52.247:27017], passives=[], arbiters=[], primary='10.11.52.248:27017', tagSet=TagSet{[]}, electionId=null, setVersion=2, lastWriteDate=Wed Dec 23 17:19:15 KST 2020, lastUpdateTimeNanos=196207581016800}
-2020-12-23 17:19:25.409  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.248:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=10.11.52.248:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=10800900, setName='testReplSet', canonicalAddress=10.11.52.248:27017, hosts=[10.11.52.248:27017, 10.11.52.246:27017, 10.11.52.247:27017], passives=[], arbiters=[], primary='10.11.52.248:27017', tagSet=TagSet{[]}, electionId=7fffffff0000000000000139, setVersion=2, lastWriteDate=Wed Dec 23 17:19:15 KST 2020, lastUpdateTimeNanos=196207580694000}
-2020-12-23 17:19:25.410  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.248:27017] org.mongodb.driver.cluster               : Setting max election id to 7fffffff0000000000000139 from replica set primary 10.11.52.248:27017
-2020-12-23 17:19:25.410  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.248:27017] org.mongodb.driver.cluster               : Setting max set version to 2 from replica set primary 10.11.52.248:27017
-2020-12-23 17:19:25.411  INFO 13132 --- [cluster-ClusterId{value='5fe2fd8df122e3426ae4eab5', description='null'}-10.11.52.248:27017] org.mongodb.driver.cluster               : Discovered replica set primary 10.11.52.248:27017
-2020-12-23 17:20:02.571  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : Starting MigrationToolApplication on HMC-UW-N040769 with PID 4444 (D:\workspace\spring_etl_oracle_to_mongo\target\classes started by H2007118 in D:\workspace\spring_etl_oracle_to_mongo)
-2020-12-23 17:20:02.575 DEBUG 4444 --- [main] c.m.migtool.MigrationToolApplication     : Running with Spring Boot v2.2.9.BUILD-SNAPSHOT, Spring v5.2.8.RELEASE
-2020-12-23 17:20:02.575  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : The following profiles are active: prod
-2020-12-23 17:20:02.957  INFO 4444 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2020-12-23 17:20:02.981  INFO 4444 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19ms. Found 0 MongoDB repository interfaces.
-2020-12-23 17:20:03.130  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : -----------------test---------------------------------------------------------------
-2020-12-23 17:20:03.253  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : Started MigrationToolApplication in 1.162 seconds (JVM running for 2.169)
-2020-12-23 17:20:03.255  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:20:03.256  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : Start MigrationToolApplication
-2020-12-23 17:20:03.256  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:20:03.256  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:20:03.257  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info  ***** 
-2020-12-23 17:20:03.257  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleip : localhost
-2020-12-23 17:20:03.257  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleport : 1521
-2020-12-23 17:20:03.257  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleid : system
-2020-12-23 17:20:03.257  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oraclepw : [oracle]
-2020-12-23 17:20:03.258  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracledatabasename : xe
-2020-12-23 17:20:03.258  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongouri : mongodb://jaehyun:jaehyun@localhost:27017/
-2020-12-23 17:20:03.258  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabasename : forum
-2020-12-23 17:20:03.258  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabaseargs : authMechanism=SCRAM-SHA-1
-2020-12-23 17:20:03.259  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.servicetype : 2
-2020-12-23 17:20:03.259  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.fromUptDtm : 20121220071237
-2020-12-23 17:20:03.259  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.toUptDtm : 20121220071237
-2020-12-23 17:20:03.259  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoFromSeq : 929898699
-2020-12-23 17:20:03.259  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoToSeq : 929898699
-2020-12-23 17:20:03.260  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info ***** 
-2020-12-23 17:20:03.260  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:20:03.260  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 17:20:03.260  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     :  >> Service Type :  2
-2020-12-23 17:20:03.260  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     :  >> From DB RowNum  :  1
-2020-12-23 17:20:03.260  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     :  >> To DB RowNum    :  1000
-2020-12-23 17:20:03.260  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     :  >> fromUptDtm   :  20121220071237
-2020-12-23 17:20:03.261  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     :  >> toUptDtm   :  20121220071237
-2020-12-23 17:20:03.261  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoFromSeq   :  929898699
-2020-12-23 17:20:03.261  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoToSeq   :  929898699
-2020-12-23 17:20:03.261  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 17:20:03.261  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:20:03.262  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : >> Oracle Url : jdbc:oracle:thin:@localhost:1521/xe
-2020-12-23 17:20:05.354 ERROR 4444 --- [main] c.m.migtool.MigrationToolApplication     : IO 오류: The Network Adapter could not establish the connection
-
-java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not establish the connection
-	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:458) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:546) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:236) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:32) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:521) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at java.sql.DriverManager.getConnection(DriverManager.java:664) ~[na:1.8.0_271]
-	at java.sql.DriverManager.getConnection(DriverManager.java:247) ~[na:1.8.0_271]
-	at com.mongodb.migtool.MigrationToolApplication.getConnection(MigrationToolApplication.java:352) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.batchInitConnection(MigrationToolApplication.java:306) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:164) [classes/:na]
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
+	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:102) [classes/:na]
 Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection
 	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:392) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
 	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:434) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
@@ -385,16 +79,17 @@ Caused by: java.net.ConnectException: Connection refused: connect
 	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:370) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
 	... 20 common frames omitted
 
-2020-12-23 17:20:05.368  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : >> Mongo connection info : mongodb://jaehyun:jaehyun@localhost:27017/forum?authMechanism=SCRAM-SHA-1
-2020-12-23 17:20:05.485  INFO 4444 --- [main] org.mongodb.driver.cluster               : Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
-2020-12-23 17:20:05.517  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : Fetch Execute Query :: SELECT * FROM  Profile_Setup_Data where 1=1 and  INFO_SEQ BETWEEN 1 AND 1000 AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= 20121220071237  
-2020-12-23 17:20:05.518  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:20:05.519  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : MigrationToolApplication Finished
-2020-12-23 17:20:05.519  INFO 4444 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:20:05.522  INFO 4444 --- [main] ConditionEvaluationReportLoggingListener : 
+2020-12-30 10:31:47.885  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : >> Mongo connection info : mongodb://jaehyun:jaehyun@localhost:27017/forum?authMechanism=SCRAM-SHA-1
+2020-12-30 10:31:47.995  INFO 15704 --- [main] org.mongodb.driver.cluster               : Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2020-12-30 10:31:48.026  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : Fetch Execute Query :: SELECT S.* FROM  Profile_Setup_Data S  where 1=1 and  PROFILE_LEVEL = 1  AND GUBUN = 0 AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= 20121220071237   AND INFO_SEQ BETWEEN1 AND 1000
+2020-12-30 10:31:48.026  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : Fetch Execute Query CNT :: SELECT COUNT(*) FROM  Profile_Setup_Data S  where 1=1 and  PROFILE_LEVEL = 1  AND GUBUN = 0 AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= 20121220071237   AND INFO_SEQ BETWEEN1 AND 1000
+2020-12-30 10:31:48.026  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
+2020-12-30 10:31:48.026  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : MigrationToolApplication Finished
+2020-12-30 10:31:48.026  INFO 15704 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
+2020-12-30 10:31:48.026  INFO 15704 --- [main] ConditionEvaluationReportLoggingListener : 
 
 Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2020-12-23 17:20:05.535 ERROR 4444 --- [main] o.s.boot.SpringApplication               : Application run failed
+2020-12-30 10:31:48.041 ERROR 15704 --- [main] o.s.boot.SpringApplication               : Application run failed
 
 java.lang.IllegalStateException: Failed to execute CommandLineRunner
 	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
@@ -402,213 +97,9 @@ java.lang.IllegalStateException: Failed to execute CommandLineRunner
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
+	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:102) [classes/:na]
 Caused by: java.lang.NullPointerException: null
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:173) [classes/:na]
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	... 5 common frames omitted
-
-2020-12-23 17:22:32.759  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : Starting MigrationToolApplication on HMC-UW-N040769 with PID 14092 (D:\workspace\spring_etl_oracle_to_mongo\target\classes started by H2007118 in D:\workspace\spring_etl_oracle_to_mongo)
-2020-12-23 17:22:32.762 DEBUG 14092 --- [main] c.m.migtool.MigrationToolApplication     : Running with Spring Boot v2.2.9.BUILD-SNAPSHOT, Spring v5.2.8.RELEASE
-2020-12-23 17:22:32.763  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : The following profiles are active: prod
-2020-12-23 17:22:33.196  INFO 14092 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2020-12-23 17:22:33.219  INFO 14092 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17ms. Found 0 MongoDB repository interfaces.
-2020-12-23 17:22:33.359  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : -----------------test---------------------------------------------------------------
-2020-12-23 17:22:33.473  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : Started MigrationToolApplication in 1.077 seconds (JVM running for 1.894)
-2020-12-23 17:22:33.474  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:22:33.475  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : Start MigrationToolApplication
-2020-12-23 17:22:33.475  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:22:33.475  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:22:33.475  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info  ***** 
-2020-12-23 17:22:33.475  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleip : localhost
-2020-12-23 17:22:33.476  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleport : 1521
-2020-12-23 17:22:33.476  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleid : system
-2020-12-23 17:22:33.476  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oraclepw : [oracle]
-2020-12-23 17:22:33.476  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracledatabasename : xe
-2020-12-23 17:22:33.476  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongouri : mongodb://jaehyun:jaehyun@localhost:27017/
-2020-12-23 17:22:33.477  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabasename : forum
-2020-12-23 17:22:33.477  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabaseargs : authMechanism=SCRAM-SHA-1
-2020-12-23 17:22:33.477  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.servicetype : 2
-2020-12-23 17:22:33.477  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.fromUptDtm : 20121220071237
-2020-12-23 17:22:33.478  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.toUptDtm : 20121220071237
-2020-12-23 17:22:33.478  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoFromSeq : 929898699
-2020-12-23 17:22:33.478  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoToSeq : 929898699
-2020-12-23 17:22:33.478  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info ***** 
-2020-12-23 17:22:33.478  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:22:33.478  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 17:22:33.478  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     :  >> Service Type :  2
-2020-12-23 17:22:33.479  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     :  >> From DB RowNum  :  1
-2020-12-23 17:22:33.479  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     :  >> To DB RowNum    :  1000
-2020-12-23 17:22:33.479  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     :  >> fromUptDtm   :  20121220071237
-2020-12-23 17:22:33.479  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     :  >> toUptDtm   :  20121220071237
-2020-12-23 17:22:33.479  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoFromSeq   :  929898699
-2020-12-23 17:22:33.479  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoToSeq   :  929898699
-2020-12-23 17:22:33.479  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 17:22:33.479  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:22:33.480  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : >> Oracle Url : jdbc:oracle:thin:@localhost:1521/xe
-2020-12-23 17:22:35.536 ERROR 14092 --- [main] c.m.migtool.MigrationToolApplication     : IO 오류: The Network Adapter could not establish the connection
-
-java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not establish the connection
-	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:458) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:546) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:236) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:32) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:521) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at java.sql.DriverManager.getConnection(DriverManager.java:664) ~[na:1.8.0_271]
-	at java.sql.DriverManager.getConnection(DriverManager.java:247) ~[na:1.8.0_271]
-	at com.mongodb.migtool.MigrationToolApplication.getConnection(MigrationToolApplication.java:352) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.batchInitConnection(MigrationToolApplication.java:306) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:164) [classes/:na]
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
-Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection
-	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:392) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:434) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.ns.NSProtocol.establishConnection(NSProtocol.java:687) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.ns.NSProtocol.connect(NSProtocol.java:247) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:1102) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:320) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	... 15 common frames omitted
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method) ~[na:1.8.0_271]
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:81) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:476) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:218) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:200) ~[na:1.8.0_271]
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:162) ~[na:1.8.0_271]
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:394) ~[na:1.8.0_271]
-	at java.net.Socket.connect(Socket.java:606) ~[na:1.8.0_271]
-	at oracle.net.nt.TcpNTAdapter.connect(TcpNTAdapter.java:150) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.nt.ConnOption.connect(ConnOption.java:133) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:370) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	... 20 common frames omitted
-
-2020-12-23 17:22:35.546  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : >> Mongo connection info : mongodb://jaehyun:jaehyun@localhost:27017/forum?authMechanism=SCRAM-SHA-1
-2020-12-23 17:22:35.637  INFO 14092 --- [main] org.mongodb.driver.cluster               : Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
-2020-12-23 17:22:35.659  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : Fetch Execute Query :: SELECT * FROM  Profile_Setup_Data where 1=1 and  INFO_SEQ BETWEEN 1 AND 1000 AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= 20121220071237  
-2020-12-23 17:22:35.660  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:22:35.660  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : MigrationToolApplication Finished
-2020-12-23 17:22:35.660  INFO 14092 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:22:35.662  INFO 14092 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2020-12-23 17:22:35.669 ERROR 14092 --- [main] o.s.boot.SpringApplication               : Application run failed
-
-java.lang.IllegalStateException: Failed to execute CommandLineRunner
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
-Caused by: java.lang.NullPointerException: null
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:173) [classes/:na]
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	... 5 common frames omitted
-
-2020-12-23 17:23:34.992  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : Starting MigrationToolApplication on HMC-UW-N040769 with PID 3108 (D:\workspace\spring_etl_oracle_to_mongo\target\classes started by H2007118 in D:\workspace\spring_etl_oracle_to_mongo)
-2020-12-23 17:23:34.996 DEBUG 3108 --- [main] c.m.migtool.MigrationToolApplication     : Running with Spring Boot v2.2.9.BUILD-SNAPSHOT, Spring v5.2.8.RELEASE
-2020-12-23 17:23:34.997  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : The following profiles are active: prod
-2020-12-23 17:23:35.369  INFO 3108 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2020-12-23 17:23:35.388  INFO 3108 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14ms. Found 0 MongoDB repository interfaces.
-2020-12-23 17:23:35.497  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : -----------------test---------------------------------------------------------------
-2020-12-23 17:23:35.596  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : Started MigrationToolApplication in 0.972 seconds (JVM running for 1.817)
-2020-12-23 17:23:35.597  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:23:35.598  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : Start MigrationToolApplication
-2020-12-23 17:23:35.598  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:23:35.598  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:23:35.598  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info  ***** 
-2020-12-23 17:23:35.598  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleip : localhost
-2020-12-23 17:23:35.598  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleport : 1521
-2020-12-23 17:23:35.598  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracleid : system
-2020-12-23 17:23:35.598  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oraclepw : [oracle]
-2020-12-23 17:23:35.599  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.oracledatabasename : XE
-2020-12-23 17:23:35.599  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongouri : mongodb://jaehyun:jaehyun@localhost:27017/
-2020-12-23 17:23:35.599  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabasename : forum
-2020-12-23 17:23:35.599  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.mongodatabaseargs : authMechanism=SCRAM-SHA-1
-2020-12-23 17:23:35.599  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.servicetype : 2
-2020-12-23 17:23:35.600  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.fromUptDtm : 20121220071237
-2020-12-23 17:23:35.600  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.toUptDtm : 20121220071237
-2020-12-23 17:23:35.600  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoFromSeq : 929898699
-2020-12-23 17:23:35.600  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : dbinfo.infoToSeq : 929898699
-2020-12-23 17:23:35.600  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : ***** application.yml properties info ***** 
-2020-12-23 17:23:35.600  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:23:35.601  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 17:23:35.601  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     :  >> Service Type :  2
-2020-12-23 17:23:35.601  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     :  >> From DB RowNum  :  1
-2020-12-23 17:23:35.601  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     :  >> To DB RowNum    :  1000
-2020-12-23 17:23:35.601  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     :  >> fromUptDtm   :  20121220071237
-2020-12-23 17:23:35.601  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     :  >> toUptDtm   :  20121220071237
-2020-12-23 17:23:35.602  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoFromSeq   :  929898699
-2020-12-23 17:23:35.602  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     :  >> infoToSeq   :  929898699
-2020-12-23 17:23:35.602  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : 
-2020-12-23 17:23:35.602  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : ******************************************** 
-2020-12-23 17:23:35.603  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : >> Oracle Url : jdbc:oracle:thin:@localhost:1521/XE
-2020-12-23 17:23:37.685 ERROR 3108 --- [main] c.m.migtool.MigrationToolApplication     : IO 오류: The Network Adapter could not establish the connection
-
-java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not establish the connection
-	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:458) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:546) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:236) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:32) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:521) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at java.sql.DriverManager.getConnection(DriverManager.java:664) ~[na:1.8.0_271]
-	at java.sql.DriverManager.getConnection(DriverManager.java:247) ~[na:1.8.0_271]
-	at com.mongodb.migtool.MigrationToolApplication.getConnection(MigrationToolApplication.java:352) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.batchInitConnection(MigrationToolApplication.java:306) [classes/:na]
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:164) [classes/:na]
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
-Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection
-	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:392) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:434) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.ns.NSProtocol.establishConnection(NSProtocol.java:687) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.ns.NSProtocol.connect(NSProtocol.java:247) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:1102) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:320) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	... 15 common frames omitted
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method) ~[na:1.8.0_271]
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:81) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:476) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:218) ~[na:1.8.0_271]
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:200) ~[na:1.8.0_271]
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:162) ~[na:1.8.0_271]
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:394) ~[na:1.8.0_271]
-	at java.net.Socket.connect(Socket.java:606) ~[na:1.8.0_271]
-	at oracle.net.nt.TcpNTAdapter.connect(TcpNTAdapter.java:150) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.nt.ConnOption.connect(ConnOption.java:133) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:370) ~[ojdbc6-11.2.0.3.jar:11.2.0.3.0]
-	... 20 common frames omitted
-
-2020-12-23 17:23:37.695  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : >> Mongo connection info : mongodb://jaehyun:jaehyun@localhost:27017/forum?authMechanism=SCRAM-SHA-1
-2020-12-23 17:23:37.800  INFO 3108 --- [main] org.mongodb.driver.cluster               : Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
-2020-12-23 17:23:37.833  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : Fetch Execute Query :: SELECT * FROM  Profile_Setup_Data where 1=1 and  INFO_SEQ BETWEEN 1 AND 1000 AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= 20121220071237  
-2020-12-23 17:23:37.834  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:23:37.834  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : MigrationToolApplication Finished
-2020-12-23 17:23:37.835  INFO 3108 --- [main] c.m.migtool.MigrationToolApplication     : --------------------------------------------------------------------------------
-2020-12-23 17:23:37.838  INFO 3108 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2020-12-23 17:23:37.848 ERROR 3108 --- [main] o.s.boot.SpringApplication               : Application run failed
-
-java.lang.IllegalStateException: Failed to execute CommandLineRunner
-	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
-	at com.mongodb.migtool.MigrationToolApplication.main(MigrationToolApplication.java:98) [classes/:na]
-Caused by: java.lang.NullPointerException: null
-	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:173) [classes/:na]
+	at com.mongodb.migtool.MigrationToolApplication.run(MigrationToolApplication.java:181) [classes/:na]
 	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784) [spring-boot-2.2.9.BUILD-SNAPSHOT.jar:2.2.9.BUILD-SNAPSHOT]
 	... 5 common frames omitted
 

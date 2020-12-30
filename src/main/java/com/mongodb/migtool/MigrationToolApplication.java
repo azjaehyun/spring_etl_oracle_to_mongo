@@ -43,6 +43,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.InsertOneModel;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.migtool.util.MigUtil;
@@ -78,6 +79,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 	@Value("${dbinfo.toUptDtm}") String toUptDtm ;
 	@Value("${dbinfo.infoTableFromSeq}") String infoFromSeq ;
 	@Value("${dbinfo.infoTableToSeq}") String infoToSeq ;
+	@Value("${dbinfo.bulkUpdateYn}") String bulkUpdateYn ;
 
 	private static ArrayList<Map<String,String>> tableList = new ArrayList<Map<String,String>>();
 	private static Logger logger = LoggerFactory.getLogger(MigrationToolApplication.class);
@@ -91,6 +93,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 	private static String TO_UPT_DTM;
 	private static String INFO_FROMSEQ;
 	private static String INFO_TOSEQ;
+	private static String BULK_UPDATE_YN;
 	private static Map<String,String> CONNECTIONPARAM = new HashMap<String,String>();
 	
 	public static void main(String[] args) {
@@ -126,6 +129,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 		connectionParam.put("toUptDtm", toUptDtm);
 		connectionParam.put("infoFromSeq", infoFromSeq);
 		connectionParam.put("infoToSeq", infoToSeq);
+		connectionParam.put("bulkUpdateYn", bulkUpdateYn);
 		logger.info("dbinfo.oracleip : "+oracleip);
 		logger.info("dbinfo.oracleport : "+oracleport);
 		logger.info("dbinfo.oracleid : "+oracleid);
@@ -139,6 +143,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 		logger.info("dbinfo.toUptDtm : "+ toUptDtm);
 		logger.info("dbinfo.infoFromSeq : "+ infoFromSeq);
 		logger.info("dbinfo.infoToSeq : "+ infoToSeq);
+		logger.info("dbinfo.bulkUpdateYn : "+ bulkUpdateYn);
 	
 		logger.info("***** application.yml properties info ***** ");
 		logger.info("******************************************** ");
@@ -150,6 +155,8 @@ public class MigrationToolApplication implements CommandLineRunner {
 		logger.info(" >> toUptDtm   :  "+toUptDtm);
 		logger.info(" >> infoFromSeq   :  "+infoFromSeq);
 		logger.info(" >> infoToSeq   :  "+infoToSeq);
+		logger.info(" >> bulkUpdateYn   :  "+bulkUpdateYn);
+		
 		logger.info("");
 		logger.info("******************************************** ");
 		
@@ -182,12 +189,13 @@ public class MigrationToolApplication implements CommandLineRunner {
 
 	
 	
-	private static void oracleToMongoInsert(String tableName , String whereQuery , String insertMongoCollectionName ) throws Exception {
+	private static void oracleToMongoInsert(String tableName , String whereQuery , String insertMongoCollectionName , String betweenQuery , String betweenA , String betweenB  ) throws Exception {
 		StringBuilder sqlString = new StringBuilder()
-				.append("SELECT * FROM  ").append(tableName).append(" where 1=1 and ").append(whereQuery);
+				.append("SELECT S.* FROM  ").append(tableName).append(" where 1=1 and ").append(whereQuery).append(  betweenQuery ).append(" ").append(betweenA).append(" AND ").append(betweenB);
+		
 		
 		StringBuilder sqlStringCNT = new StringBuilder()
-				.append("SELECT COUNT(*) FROM  ").append(tableName).append(" where 1=1 and ").append(whereQuery);
+				.append("SELECT COUNT(*) FROM  ").append(tableName).append(" where 1=1 and ").append(whereQuery).append( betweenQuery ).append(" ").append(betweenA).append(" AND ").append(betweenB);
 		
 		
 		try {
@@ -206,6 +214,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 			
 			int columnCount = rsmd.getColumnCount();
 			int insertCount = 0;
+			int updateCount = 0;
 
 			HashMap buffer = null;
 
@@ -217,64 +226,112 @@ public class MigrationToolApplication implements CommandLineRunner {
 			InsertOneModel insertOneModel = null;
 			Document insertDoc = null;
 			List<InsertOneModel> insertDocuments = new ArrayList<>();
-			
+			UpdateOneModel updateOneModel = null;
+			List<UpdateOneModel> updateDocuments = new ArrayList<>();
 			
 			int lastRowNum = 0;
 			int bulkInsertCount = 0;
+			int bulkUpdateCount = 0;
 			
-			
-			if(SERVICE_TYPE.equals("1") || SERVICE_TYPE.equals("2") ||  SERVICE_TYPE.equals("3") || SERVICE_TYPE.equals("10") ) {
-				while (rs.next()) {
-					
-					buffer = new HashMap<String,Object>();
-					for (int idx = 1; idx < columnCount+1; idx++) {
-						String key = rsmd.getColumnName(idx).toUpperCase();
-						int columnTypeCode =  rsmd.getColumnType(idx) ;
-					    buffer.put(key,  MigUtil.converTypeCasting( columnTypeCode , rs.getObject(idx)));
-					}
-					Document remappingMap = convertTargetDocumentVO(buffer,insertMongoCollectionName , mongoDatabase );
-					if( ! remappingMap.isEmpty() ) {
-						// lastRowNum = Integer.parseInt(remappingMap.get("seq").toString());
-						if(!insertDocuments.contains(remappingMap)) {
+			while (rs.next()) {
+				
+				buffer = new HashMap<String,Object>();
+				for (int idx = 1; idx < columnCount+1; idx++) {
+					String key = rsmd.getColumnName(idx).toUpperCase();
+					int columnTypeCode =  rsmd.getColumnType(idx) ;
+				    buffer.put(key,  MigUtil.converTypeCasting( columnTypeCode , rs.getObject(idx)));
+				}
+				Document remappingMap = convertTargetDocumentVO(buffer,insertMongoCollectionName , mongoDatabase );
+				if( ! remappingMap.isEmpty() ) {
+					// lastRowNum = Integer.parseInt(remappingMap.get("seq").toString());
+					if(!insertDocuments.contains(remappingMap)) {
+						if("N".equals(BULK_UPDATE_YN)) {
 							insertOneModel = new InsertOneModel(remappingMap);
 							insertDocuments.add(insertOneModel);
-							insertCount++;
+							insertCount++;	
+						}else {
+							if("stage1ProfileInfo".equals(insertMongoCollectionName) ) {
+								Bson filter = and (eq("vin",buffer.get("VIN").toString()),eq("nadId",buffer.get("NADID").toString()),eq("profileIndex", Integer.parseInt(buffer.get("PROFILE_INDEX").toString())));
+								updateOneModel = new UpdateOneModel( filter , new Document("$set" , remappingMap ) , new UpdateOptions().upsert(true) );
+								updateDocuments.add(updateOneModel);
+								updateCount++;
+							}else if( "stage2ProfileInfo".equals(insertMongoCollectionName)) {
+								Bson filter = and ( eq("profileIndex",Integer.parseInt(buffer.get("PROFILE_INDEX").toString())), eq("profileID",buffer.get("PROFILE_ID").toString()) , eq("vin",buffer.get("VIN").toString()) ,  eq("nadId",buffer.get("NADID").toString()));
+								updateOneModel = new UpdateOneModel( filter , new Document("$set" , remappingMap ) , new UpdateOptions().upsert(true) );
+								updateDocuments.add(updateOneModel);
+								updateCount++;
+							}else if ("stage1PresentProfileSetup".equals(insertMongoCollectionName)) {
+								Bson filter = Filters.eq("seq",buffer.get("INFO_SEQ").toString());
+								Bson sort = Sorts.descending("seq");
+								MongoCollection stage1ProfileInfo = mongoDatabase.getCollection("stage1ProfileInfo");
+								logger.info("stage1ProfileSetup Search seq : "+buffer.get("INFO_SEQ").toString());
+								FindIterable<Document> resultObj =   stage1ProfileInfo.find( filter  ).sort(sort);
+							    
+								if(resultObj.first() !=null) {
+									Map<String,Object> map = new HashMap<String,Object>();
+									String mongoInfoObjectId =  resultObj.first().get("_id").toString();
+									map.put("profileInfoId", new ObjectId(mongoInfoObjectId) );
+									map.put("isBackupRecord", "0".equals(buffer.get("GUBUN").toString()) ? Boolean.TRUE : Boolean.FALSE  );
+									map.put("category", buffer.get("CATEGORY").toString()  );
+									
+									
+									Bson searchProfileSetupObjectId = Filters.eq("_id",map);
+									updateOneModel = new UpdateOneModel( filter , new Document("$set" , remappingMap ) , new UpdateOptions().upsert(true) );
+									updateDocuments.add(updateOneModel);
+									updateCount++;
+								}	
+							}else if ("stage2PresentProfileSetup".equals(insertMongoCollectionName)) {
+								Bson filter = Filters.eq("seq",buffer.get("INFO_SEQ").toString());
+								Bson sort = Sorts.descending("seq");
+								MongoCollection stage2ProfileInfo = mongoDatabase.getCollection("stage2ProfileInfo");
+								logger.info("stage2ProfileSetup Search seq : "+buffer.get("INFO_SEQ").toString());
+								FindIterable<Document> resultObj =   stage2ProfileInfo.find( filter  ).sort(sort);
+							    
+								if(resultObj.first() !=null) {
+									Map<String,Object> map = new HashMap<String,Object>();
+									String mongoInfoObjectId =  resultObj.first().get("_id").toString();
+									map.put("profileInfoId", new ObjectId(mongoInfoObjectId) );
+									map.put("isBackupRecord", "0".equals(buffer.get("GUBUN").toString()) ? Boolean.TRUE : Boolean.FALSE  );
+									// map.put("category", buffer.get("CATEGORY").toString()  );
+									
+									
+									Bson searchProfileSetupObjectId = Filters.eq("_id",map);
+									updateOneModel = new UpdateOneModel( filter , new Document("$set" , remappingMap ) , new UpdateOptions().upsert(true) );
+									updateDocuments.add(updateOneModel);
+									updateCount++;
+								}	
+							}
 						}
+						
 					}
-					if(insertCount % 1000 == 0    ) {
-						logger.info("bulkWriteCount : "+insertCount);
-						if(insertDocuments.size() !=0) {
-							bulkWriteResult = mongoCollection.bulkWrite(insertDocuments);
-							insertDocuments = new ArrayList<>();
-							bulkInsertCount++;
-						}
+				}
+				if(insertCount % 1000 == 0    ) {
+					logger.info("bulkWrite Insert Count : "+insertCount);
+					if(insertDocuments.size() !=0) {
+						bulkWriteResult = mongoCollection.bulkWrite(insertDocuments);
+						insertDocuments = new ArrayList<>();
+						bulkInsertCount++;
 					}
-				} // End of While Loop Fetch
+				}
+				if(updateCount % 1000 == 0    ) {
+					logger.info("bulkWrite Update Count : "+updateCount);
+					if(updateDocuments.size() !=0) {
+						bulkWriteResult = mongoCollection.bulkWrite(updateDocuments);
+						updateDocuments = new ArrayList<>();
+						bulkUpdateCount++;
+					}
+				}
+			} // End of While Loop Fetch
+			if(insertDocuments.size() > 0) {
 				bulkWriteResult = mongoCollection.bulkWrite(insertDocuments);
-				logger.info("From Oracle TableName : " +tableName + " / To MongoCollection : " + insertMongoCollectionName+ " / insert count : "+insertCount );
-			}else  {
-				while (rs.next()) {
-					buffer = new HashMap<String,Object>();
-					for (int idx = 1; idx < columnCount+1; idx++) {
-						String key = rsmd.getColumnName(idx).toUpperCase();
-						int columnTypeCode =  rsmd.getColumnType(idx) ;
-					    buffer.put(key,  MigUtil.converTypeCasting( columnTypeCode , rs.getObject(idx)));
-					}
-					if(SERVICE_TYPE.equals("4")) {
-						logger.info(" >> stage2ProfileInfoCollectionDupCheck start " );
-						stage1ProfileInfoCollectionDupCheck(buffer,insertMongoCollectionName , mongoDatabase);
-					}else if(SERVICE_TYPE.equals("5")) {
-						logger.info(" >> stage2ProfileInfoCollectionDupCheck start " );
-						stage2ProfileInfoCollectionDupCheck(buffer,insertMongoCollectionName , mongoDatabase);
-					}else if(SERVICE_TYPE.equals("6")) {
-						logger.info(" >> stage1ProfileSetupCollectionSync start " );
-						stage1ProfileSetupCollectionSync(buffer,insertMongoCollectionName , mongoDatabase);
-					}else if(SERVICE_TYPE.equals("7")) {
-						logger.info(" >> stage2ProfileSetupCollectionSync start " );
-						stage2ProfileSetupCollectionSync(buffer,insertMongoCollectionName , mongoDatabase);
-					}
-				} // End of While Loop Fetch
 			}
+			
+			if(updateDocuments.size() > 0) {
+				bulkWriteResult = mongoCollection.bulkWrite(updateDocuments);
+			}
+		
+			logger.info("From Oracle TableName : " +tableName + " / To MongoCollection : " + insertMongoCollectionName+ " / insert count : "+insertCount + " / update count : "+updateCount );
+		
 			
 			
 
@@ -292,7 +349,33 @@ public class MigrationToolApplication implements CommandLineRunner {
 			
 			for ( Map<String, String> data :  tableList) {
 				long beforeTime = System.currentTimeMillis();
-				oracleToMongoInsert( data.get("tableName") , data.get("whereQuery") , data.get("targetCollection"));
+				
+				
+				
+				float fromRow = Integer.parseInt(data.get("fromRow").toString());
+				float toRow = Integer.parseInt(data.get("toRow").toString());
+				
+				int step = 10000;
+				String str = String.format("%.2f",(toRow-fromRow) / new Float(step) );
+				int grp = (int) Math.ceil(Double.parseDouble(str));
+				
+				float betweenA = 0 ;
+				float betweenB = 0 ;
+				for ( int i = 0 ; i < grp ; i++) {
+					betweenA = fromRow + ( i * step );
+					betweenB = (betweenA + step ) - 1;
+					if( grp ==  i + 1) {
+						// System.out.println("between A " + Integer.toString((int) betweenA) + " and "+ Integer.toString((int)toRow));
+						oracleToMongoInsert( data.get("tableName") , data.get("whereQuery") , data.get("targetCollection") , data.get("between") ,  Integer.toString((int) betweenA) ,Integer.toString((int)toRow) );
+					}else {
+						// System.out.println("between A " +  Integer.toString((int) betweenA) + " and "+ Integer.toString((int)betweenB));
+						oracleToMongoInsert( data.get("tableName") , data.get("whereQuery") , data.get("targetCollection") , data.get("between") ,  Integer.toString((int) betweenA) , Integer.toString((int)betweenB) );
+					}
+				}
+			
+				
+				// oracleToMongoInsert( data.get("tableName") , data.get("whereQuery") , data.get("targetCollection") ,  );
+				
 				long afterTime = System.currentTimeMillis(); 
 				long secDiffTime = (afterTime - beforeTime)/1000;
 				logger.info("excute runtime(sec) : "+secDiffTime);
@@ -382,83 +465,117 @@ public class MigrationToolApplication implements CommandLineRunner {
 		if("1".equals(servicetype)) {
 			/* master table : start */
 			Map<String,String> map1 = new HashMap<String, String>();
-			map1.put("tableName", "Profile_Info");
-			map1.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+			map1.put("tableName", "Profile_Info S ");
+			// map1.put("whereQuery", "SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+			map1.put("whereQuery", " 1=1 ");
 			map1.put("targetCollection","stage1ProfileInfo");
+			map1.put("between", " AND SEQ BETWEEN ");
+			map1.put("fromRow",FROM_ROWNUM);
+			map1.put("toRow",TO_ROWNUM);
 			list.add(map1);
 			
 			Map<String,String> map2 = new HashMap<String, String>();
-			map2.put("tableName", "Profile_Info");
-			map2.put("whereQuery", " SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" ");
+			map2.put("tableName", "Profile_Info S ");
+			map2.put("whereQuery", " 1=1 ");
 			map2.put("targetCollection","stage2ProfileInfo");
+			map2.put("between", " AND INFO_SEQ BETWEEN ");
+			map2.put("fromRow",FROM_ROWNUM);
+			map2.put("toRow",TO_ROWNUM);
 			list.add(map2);
 			/* master table end */
 		}
 		
 		if("2".equals(servicetype)) {
 			Map<String,String> map3 = new HashMap<String, String>();
-			map3.put("tableName", "Profile_Setup_Data");
-			map3.put("whereQuery", " INFO_SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= "+TO_UPT_DTM + "  ");
+			map3.put("tableName", "Profile_Setup_Data S ");
+			// map3.put("whereQuery", " INFO_SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +" AND PROFILE_LEVEL = 1  AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') <= "+TO_UPT_DTM + "  ");
+			map3.put("whereQuery", " PROFILE_LEVEL = 1  AND GUBUN = 0 AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') < "+TO_UPT_DTM + "  ");
 			map3.put("targetCollection","stage1PresentProfileSetup");
+			map3.put("between", " AND INFO_SEQ BETWEEN");
+			map3.put("fromRow", FROM_ROWNUM);
+			map3.put("toRow", TO_ROWNUM);
 			list.add(map3);
 		}
 
 		if("3".equals(servicetype)) {
 			Map<String,String> map4 = new HashMap<String, String>();
-			map4.put("tableName", "Profile_Setup_Data");
-			map4.put("whereQuery", " INFO_SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +"  AND PROFILE_LEVEL = 2  AND GUBUN = 1 ");
-			map4.put("targetCollection","stage2PresentProfileSetup");
+			map4.put("tableName", "Profile_Setup_Data S ");
+			map4.put("whereQuery", " PROFILE_LEVEL = 1  AND GUBUN = 1 AND UPT_DTM IS NULL ");
+			map4.put("targetCollection","stage1PresentProfileSetup");
+			map4.put("between", " AND INFO_SEQ BETWEEN ");
+			map4.put("fromRow",FROM_ROWNUM);
+			map4.put("toRow",TO_ROWNUM);
 			list.add(map4);
 		}
 		
-		/*sync*/
-		
 		if("4".equals(servicetype)) {
-			/* master table : start */
-			Map<String,String> map1 = new HashMap<String, String>();
-			map1.put("tableName", "Profile_Info");
-			map1.put("whereQuery", "SEQ > "+ TO_ROWNUM +" ");
-			map1.put("targetCollection","stage1ProfileInfo");
-			list.add(map1);
-			
+			Map<String,String> map4 = new HashMap<String, String>();
+			map4.put("tableName", "Profile_Setup_Data S ");
+			//map4.put("whereQuery", " INFO_SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM +"  AND PROFILE_LEVEL = 2  AND GUBUN = 1 ");
+			map4.put("whereQuery", " PROFILE_LEVEL = 2  AND GUBUN = 1 ");
+			map4.put("targetCollection","stage2PresentProfileSetup");
+			map4.put("between", " AND INFO_SEQ BETWEEN ");
+			map4.put("fromRow",FROM_ROWNUM);
+			map4.put("toRow",TO_ROWNUM);
+			list.add(map4);
 		}
 		
-		if("5".equals(servicetype)) {
-			Map<String,String> map2 = new HashMap<String, String>();
-			map2.put("tableName", "Profile_Info");
-			map2.put("whereQuery", "SEQ > "+ TO_ROWNUM +" ");
-			map2.put("targetCollection","stage2ProfileInfo");
-			list.add(map2);
-			/* master table end */
-		}
-
 		
+		// update 구간
 		
 		if("6".equals(servicetype)) {
 			Map<String,String> map3 = new HashMap<String, String>(); // TO_CHAR('YYYYMMDDHH24MISS')
-			map3.put("tableName", "Profile_Setup_Data");
-			map3.put("whereQuery", " ( INFO_SEQ BETWEEN "+ FROM_ROWNUM + " AND "+ TO_ROWNUM  +" AND  PROFILE_LEVEL = 1 ) or ( GUBUN=0 and TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') BETWEEN  "+ FROM_UPT_DTM +" AND "+ TO_UPT_DTM +"  ) or ( SEQ BETWEEN  "+ INFO_FROMSEQ +" AND "+ INFO_TOSEQ +" ) ");
+			map3.put("tableName", "Profile_Setup_Data S ");
+			map3.put("whereQuery", " PROFILE_LEVEL = 1  AND GUBUN = 0 ");
 			// SEQ > 20000
 			map3.put("targetCollection","stage1PresentProfileSetup");
+			map3.put("between", " AND TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') BETWEEN ");
+			map3.put("fromRow",FROM_UPT_DTM);
+			map3.put("toRow",TO_UPT_DTM);
 			list.add(map3);
 		}
 		
 		if("7".equals(servicetype)) {
-			Map<String,String> map4 = new HashMap<String, String>();
-			map4.put("tableName", "Profile_Setup_Data");
-			map4.put("whereQuery", " INFO_SEQ BETWEEN  "+ FROM_ROWNUM +"  AND "+TO_ROWNUM +" PROFILE_LEVEL = 2  AND GUBUN = 1 ");
-			map4.put("targetCollection","stage2PresentProfileSetup");
-			list.add(map4);
+			// map3.put("whereQuery", " ( INFO_SEQ BETWEEN "+ FROM_ROWNUM + " AND "+ TO_ROWNUM  +" AND  PROFILE_LEVEL = 1 ) or ( GUBUN=0 and TO_CHAR(UPT_DTM,'yyyyMMddHH24miss') BETWEEN  "+ FROM_UPT_DTM +" AND "+ TO_UPT_DTM +"  ) or ( SEQ BETWEEN  "+ INFO_FROMSEQ +" AND "+ INFO_TOSEQ +" ) ");
+			Map<String,String> map3 = new HashMap<String, String>(); // TO_CHAR('YYYYMMDDHH24MISS')
+			map3.put("tableName", "Profile_Setup_Data S ");
+			map3.put("whereQuery", " PROFILE_LEVEL = 1  AND GUBUN = 1 AND UPT_DTM IS NULL  " );
+		
+			// SEQ > 20000
+			map3.put("targetCollection","stage1PresentProfileSetup");
+			map3.put("between", " AND INFO_SEQ BETWEEN ");
+			map3.put("fromRow",FROM_ROWNUM);
+			map3.put("toRow",TO_ROWNUM);
+			list.add(map3);
 		}
 		
 		
-		if("10".equals(servicetype)) {
-			Map<String,String> map4 = new HashMap<String, String>();
-			map4.put("tableName", "Profile_Setup_Data");
-			map4.put("whereQuery", "  PROFILE_LEVEL = 1 AND GUBUN = 1 AND INFO_SEQ BETWEEN "+ FROM_ROWNUM +" AND "+ TO_ROWNUM + " ");
-			map4.put("targetCollection","stage1PresentProfileSetup");
-			list.add(map4);
+		
+		if("8".equals(servicetype)) {
+			Map<String,String> map3 = new HashMap<String, String>(); // TO_CHAR('YYYYMMDDHH24MISS')
+			map3.put("tableName", "Profile_Setup_Data S ");
+			map3.put("whereQuery", " PROFILE_LEVEL = 2  AND GUBUN = 1  ");
+			// SEQ > 20000
+			map3.put("targetCollection","stage2PresentProfileSetup");
+			map3.put("between", " AND SEQ BETWEEN ");
+			map3.put("fromRow",INFO_FROMSEQ);
+			map3.put("toRow",INFO_TOSEQ);
+			list.add(map3);
 		}
+		
+//		if("9".equals(servicetype)) {
+//			Map<String,String> map4 = new HashMap<String, String>();
+//			map4.put("tableName", "Profile_Setup_Data S ");
+//			map4.put("whereQuery", " PROFILE_LEVEL = 2  AND GUBUN = 1 ");
+//			map4.put("targetCollection","stage2PresentProfileSetup");
+//			map4.put("between", " AND INFO_SEQ BETWEEN");
+//			map4.put("fromRow",FROM_ROWNUM);
+//			map4.put("toRow",TO_ROWNUM);
+//			list.add(map4);
+//		}
+		
+		
+	
 		
 		
 		
@@ -662,271 +779,7 @@ public class MigrationToolApplication implements CommandLineRunner {
 		
 	}
 	
-	public static String stage1ProfileInfoCollectionDupCheck(HashMap buffer , String insertMongoCollectionName , MongoDatabase mongoDatabase ) {
-		Bson filter = and (eq("vin",buffer.get("VIN").toString()),eq("nadId",buffer.get("NADID").toString()),eq("profileIndex", Integer.parseInt(buffer.get("PROFILE_INDEX").toString())));
-		
-		MongoCollection mongoCollection = mongoDatabase.getCollection("stage1ProfileInfo");
-		FindIterable<Document> resultObj =   mongoCollection.find(  filter  );
-		
-		Document dc = new Document();
-		dc.append("profileIndex",Integer.parseInt(buffer.get("PROFILE_INDEX").toString()));
-		dc.append("vin",buffer.get("VIN").toString() );
-		dc.append("nadId",buffer.get("NADID").toString());
-		dc.append("isSynced", Boolean.FALSE);
-		if (  buffer.get("RGST_DTM") !=null ) {
-			dc.append("createTime", buffer.get("RGST_DTM").toString() );  // null check
-		}
-		dc.append("seq",buffer.get("SEQ").toString());
-		
-		if ( resultObj.first() != null) {  // 과거 내역 지우고 다시 insert 
-			DeleteResult ds = mongoCollection.deleteMany(filter);
-			logger.info("deleteCnt : "+ds.getDeletedCount()+ " delete stage1ProfileInfo : VIN : "+buffer.get("VIN").toString()+" NADID : "+buffer.get("NADID").toString());	
-		}	
-		mongoCollection.insertOne(dc);
-		logger.info("insert stage1ProfileInfo : VIN : "+buffer.get("VIN").toString()+" NADID : "+buffer.get("NADID").toString());	
-		return "";
-	}
 	
-	public static String stage2ProfileInfoCollectionDupCheck(HashMap buffer , String insertMongoCollectionName , MongoDatabase mongoDatabase ) {
-		Bson filter = and (   eq("profileIndex",Integer.parseInt(buffer.get("PROFILE_INDEX").toString())), eq("profileID",buffer.get("PROFILE_ID").toString()) , eq("vin",buffer.get("VIN").toString()) ,  eq("nadId",buffer.get("NADID").toString()));
-		MongoCollection mongoCollection = mongoDatabase.getCollection("stage2ProfileInfo");
-		FindIterable<Document> resultObj =   mongoCollection.find(  filter  );
-		Document dc = new Document();
-		if( buffer.get("PROFILE_INDEX") !=null) {
-			dc.append("profileIndex",Integer.parseInt(buffer.get("PROFILE_INDEX").toString()));
-		}
-		if( buffer.get("PROFILE_NAME") !=null) {
-			dc.append("profileName",buffer.get("PROFILE_NAME").toString());
-		}
-		if( buffer.get("PROFILE_ID") !=null ) {
-			dc.append("profileID",buffer.get("PROFILE_ID").toString());
-		}
-		if( buffer.get("PHONE_NUM") !=null ) {
-			dc.append("phoneNum",buffer.get("PHONE_NUM").toString()); // null check
-		}
-		dc.append("vin",buffer.get("VIN").toString());
-		dc.append("nadId",buffer.get("NADID").toString());
-		if( buffer.get("RGST_DTM") !=null ) {
-			dc.append("createTime",buffer.get("RGST_DTM").toString());   // null check
-		}
-		dc.append("seq",buffer.get("SEQ").toString());
-		if ( resultObj.first() != null) {  // 과거 내역 지우고 다시 insert 
-			DeleteResult ds = mongoCollection.deleteMany(filter);
-			logger.info("deleteCnt : "+ds.getDeletedCount()+ " delete stage2ProfileInfo : PROFILE_INDEX : "+buffer.get("PROFILE_INDEX").toString()+" profileID : "+buffer.get("PROFILE_ID").toString() + "VIN : "+buffer.get("VIN").toString()+" NADID : "+buffer.get("NADID").toString());	
-		}	
-		logger.info("insert stage2ProfileInfo : PROFILE_INDEX : "+buffer.get("PROFILE_INDEX").toString()+" profileID : "+buffer.get("PROFILE_ID").toString() + "VIN : "+buffer.get("VIN").toString()+" NADID : "+buffer.get("NADID").toString());
-		mongoCollection.insertOne(dc);
-		return "";
-	}
-	
-	
-	
-	
-	
-	
-	//TODO
-	public static String stage1ProfileSetupCollectionSync( HashMap buffer , String insertMongoCollectionName , MongoDatabase mongoDatabase  ) throws SQLException {
-		
-		Document dc = new Document();		
-		Map<String,Object> idSet = new HashMap<String,Object>();
-		Map<String,Object> savedTimeVal = new HashMap<String,Object>();
-		
-		Bson filter = Filters.eq("seq",buffer.get("INFO_SEQ").toString());
-		Bson sort = Sorts.descending("seq");
-		MongoCollection mongoCollection = mongoDatabase.getCollection("stage1ProfileInfo");
-		logger.info("stage1ProfileSetup Search seq : "+buffer.get("INFO_SEQ").toString());
-		FindIterable<Document> resultObj =   mongoCollection.find(filter  ).sort(sort);
-	    
-		if(resultObj.first() !=null) {
-			Map<String,Object> map = new HashMap<String,Object>();
-			String mongoInfoObjectId =  resultObj.first().get("_id").toString();
-			map.put("profileInfoId", new ObjectId(mongoInfoObjectId) );
-			map.put("isBackupRecord", "0".equals(buffer.get("GUBUN").toString()) ? Boolean.TRUE : Boolean.FALSE  );
-			map.put("category", buffer.get("CATEGORY").toString()  );
-			
-			
-			Bson searchProfileSetupObjectId = Filters.eq("_id",map);
-			MongoCollection mongoCollection2 = mongoDatabase.getCollection("stage1PresentProfileSetup");
-			logger.info("stage1PresentProfileSetup Search _id : "+map);
-			FindIterable<Document> resultObj2  = mongoCollection2.find(searchProfileSetupObjectId);
-			if( resultObj2.first() !=null ) {   // 변경된 마스터 아이디를 가져와서~
-				// 그냥 무조건 지우고 insert
-				//Bson deleteParam = Filters.eq("_id",searchProfileSetupObjectId);
-				// mongoCollection2.deleteOne(deleteParam);
-			
-				UpdateOptions updateOptions = new UpdateOptions().upsert(true);
-				
-				logger.info("stage1ProfileSetup delete : "+searchProfileSetupObjectId);
-				idSet.put("profileInfoId", new ObjectId( mongoInfoObjectId ) );
-			    idSet.put("category", buffer.get("CATEGORY").toString()  );
-			    idSet.put("isBackupRecord", "0".equals(buffer.get("GUBUN").toString()) ? Boolean.TRUE : Boolean.FALSE  );
-				
-				savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
-				savedTimeVal.put("offset", buffer.get("UTC_OFFSET").toString()  );
-				
-			
-				// dc.append("_id",idSet);
-				dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
-				dc.append("savedTime",savedTimeVal);
-				dc.append("fileName",buffer.get("FILENAME").toString());
-				if(buffer.get("SETUP_FILE")!=null) {
-					try {
-						dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("SETUP_FILE").toString())  :  buffer.get("SETUP_FILE").toString());
-					} catch (IllegalArgumentException e) {
-						//e.printStackTrace();
-						logger.info("stage1PresentProfileSetup IllegalArgumentException INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
-							
-					} catch (Exception e) {
-						logger.info("stage1PresentProfileSetup Exception INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
-						//e.printStackTrace();
-								
-					}
-				}
-				if(buffer.get("RGST_DTM")!=null) {
-					dc.append("createDate",buffer.get("RGST_DTM").toString());
-				}
-				logger.info("stage1PresentProfileSetup update _id : "+idSet);
-				mongoCollection2.updateOne(new Document().append("_id", idSet ) ,new Document().append("$set",dc),updateOptions);
-				logger.info("stage1ProfileSetup insert  : "+searchProfileSetupObjectId);
-			}else {
-				
-				idSet.put("profileInfoId", new ObjectId( mongoInfoObjectId ) );
-			    idSet.put("category", buffer.get("CATEGORY").toString()  );
-			    idSet.put("isBackupRecord", "0".equals(buffer.get("GUBUN").toString()) ? Boolean.TRUE : Boolean.FALSE  );
-				
-				savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
-				savedTimeVal.put("offset", buffer.get("UTC_OFFSET").toString()  );
-				
-			
-				dc.append("_id",idSet);
-				dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
-				dc.append("savedTime",savedTimeVal);
-				dc.append("fileName",buffer.get("FILENAME").toString());
-				if(buffer.get("SETUP_FILE")!=null) {
-					try {
-						dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("SETUP_FILE").toString())  :  buffer.get("SETUP_FILE").toString());
-					} catch (IllegalArgumentException e) {
-						//e.printStackTrace();
-						logger.info("stage1PresentProfileSetup IllegalArgumentException INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
-							
-					} catch (Exception e) {
-						logger.info("stage1PresentProfileSetup Exception INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
-						//e.printStackTrace();
-								
-					}
-				}
-				if(buffer.get("RGST_DTM")!=null) {
-					dc.append("createDate",buffer.get("RGST_DTM").toString());
-				}
-				
-				mongoCollection2.insertOne(dc);
-				logger.info("stage1ProfileSetup insert");
-				
-			}
-			
-		}
-		
-		
-		
-		return "";
-	}
-	
-	//TODO
-	public static String stage2ProfileSetupCollectionSync( HashMap buffer , String insertMongoCollectionName , MongoDatabase mongoDatabase  ) throws SQLException {
-		
-		Document dc = new Document();		
-		Map<String,Object> idSet = new HashMap<String,Object>();
-		Map<String,Object> savedTimeVal = new HashMap<String,Object>();
-		
-		Bson filter = Filters.eq("seq",buffer.get("INFO_SEQ"));
-		Bson sort = Sorts.descending("seq");
-		MongoCollection mongoCollection = mongoDatabase.getCollection("stage2ProfileInfo");
-		logger.info("stage2ProfileSetup Search seq : "+buffer.get("INFO_SEQ").toString());
-		FindIterable<Document> resultObj =   mongoCollection.find(filter  ).sort(sort);
-	    
-		if(resultObj.first() !=null) {
-			Map<String,Object> map = new HashMap<String,Object>();
-			String mongoInfoObjectId =  resultObj.first().get("_id").toString();
-			map.put("profileInfoId", new ObjectId(mongoInfoObjectId) );
-			map.put("category", buffer.get("CATEGORY").toString()  );
-			// map.put("isBackupRecord", "0".equals(buffer.get("GUBUN").toString()) ? Boolean.TRUE : Boolean.FALSE  );
-			
-			
-			Bson searchProfileSetupObjectId = Filters.eq("_id",map);
-			MongoCollection mongoCollection2 = mongoDatabase.getCollection("stage2PresentProfileSetup");
-			logger.info("stage2PresentProfileSetup Search _id : "+map);
-			FindIterable<Document> resultObj2  = mongoCollection2.find(searchProfileSetupObjectId);
-			UpdateOptions updateOptions = new UpdateOptions().upsert(true);
-		
-			if( resultObj2.first() !=null ) {   // 변경된 마스터 아이디를 가져와서~
-				
-				// 그냥 무조건 지우고 insert
-				//Bson deleteParam = Filters.eq("_id",searchProfileSetupObjectId);
-				//mongoCollection2.deleteOne(deleteParam);
-				idSet.put("profileInfoId",  new ObjectId( mongoInfoObjectId ) );
-			    idSet.put("category", buffer.get("CATEGORY").toString()  );
-				savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
-				savedTimeVal.put("offset", buffer.get("UTC_OFFSET").toString()  );
-				
-				// dc.append("_id",idSet);
-				dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
-				dc.append("savedTime",savedTimeVal);
-				dc.append("fileName",buffer.get("FILENAME").toString());
-				if(buffer.get("SETUP_FILE")!=null) {
-					try {
-						dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("SETUP_FILE").toString())  :  buffer.get("SETUP_FILE").toString());
-					} catch (IllegalArgumentException e) {
-						//e.printStackTrace();
-						logger.info("stage1PresentProfileSetup IllegalArgumentException INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
-							
-					} catch (Exception e) {
-						logger.info("stage1PresentProfileSetup Exception INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
-						//e.printStackTrace();
-								
-					}
-				}
-				if(buffer.get("RGST_DTM")!=null) {
-					dc.append("createDate",buffer.get("RGST_DTM").toString());
-				}
-			
-				mongoCollection2.updateOne(new Document().append("_id", idSet ) ,new Document().append("$set",dc),updateOptions);
-				logger.info("stage2ProfileSetup insert : "+searchProfileSetupObjectId);
-			}else {
-				idSet.put("profileInfoId",  new ObjectId( mongoInfoObjectId ) );
-			    idSet.put("category", buffer.get("CATEGORY").toString()  );
-				savedTimeVal.put("utc",  buffer.get("UTC_OFFSET_DATETIME").toString()  );
-				savedTimeVal.put("offset", buffer.get("UTC_OFFSET").toString()  );
-				
-				dc.append("_id",idSet);
-				dc.append("metaDataVersion",buffer.get("METADATA_VERSION").toString());
-				dc.append("savedTime",savedTimeVal);
-				dc.append("fileName",buffer.get("FILENAME").toString());
-				if(buffer.get("SETUP_FILE")!=null) {
-					try {
-						dc.append("setupFile", !"50".equals(buffer.get("CATEGORY").toString()) ? MigUtil.base64Decoding(buffer.get("SETUP_FILE").toString())  :  buffer.get("SETUP_FILE").toString());
-					} catch (IllegalArgumentException e) {
-						//e.printStackTrace();
-						logger.info("stage1PresentProfileSetup IllegalArgumentException INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
-							
-					} catch (Exception e) {
-						logger.info("stage1PresentProfileSetup Exception INSERT PASS >> INFO_SEQ :"+ buffer.get("INFO_SEQ").toString() +  " CATEGORY : "+buffer.get("CATEGORY").toString() + " GUBUN : "+buffer.get("GUBUN").toString());
-						//e.printStackTrace();
-								
-					}
-				}
-				if(buffer.get("RGST_DTM")!=null) {
-					dc.append("createDate",buffer.get("RGST_DTM").toString());
-				}
-			
-				mongoCollection2.insertOne(dc);
-				logger.info("stage2ProfileSetup insert : "+searchProfileSetupObjectId);
-			}
-		}
-		
-		
-		
-		return "";
-	}
 
 	public static void updateMongoSync(HashMap buffer , String insertMongoCollectionName , MongoDatabase mongoDatabase  ) {
 		Bson filter = Filters.eq("seq",buffer.get("SEQ"));

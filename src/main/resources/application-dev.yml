@@ -13,8 +13,8 @@ dbinfo:
    infoTableToSeq : 929898699
    servicetype: "0"
    fromUptDtm: "20121220071237"
-   toUptDtm : "20121220071237"   
-   
+   toUptDtm : "20201230071237"   
+   bulkUpdateYn : "N"
 
 #spring:
 #  data:

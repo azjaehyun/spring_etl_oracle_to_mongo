@@ -8,12 +8,13 @@ dbinfo:
    mongodatabasename: ApptxPersonalization
    mongodatabaseargs: replicaSet=PCSReplSet&authSource=admin
    fromRowNum: 1
-   toRowNum: 1000
-   infoTableFromSeq : 929898699
-   infoTableToSeq : 929898699
+   toRowNum: 10000
+   infoTableFromSeq : 1
+   infoTableToSeq : 10000
    servicetype: "0"
    fromUptDtm: "20121220071237"
    toUptDtm : "20121220071237"   
+   bulkUpdateYn : "N"
 
 #spring:
 #  data:
