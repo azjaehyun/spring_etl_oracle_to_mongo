@@ -14,7 +14,7 @@ dbinfo:
    servicetype: "0"
    fromUptDtm: "20121220071237"
    toUptDtm : "20121220071237"   
-   bulkUpdateYn : "N"
+   bulkUpdateYn : "Y"
 
 #spring:
 #  data:

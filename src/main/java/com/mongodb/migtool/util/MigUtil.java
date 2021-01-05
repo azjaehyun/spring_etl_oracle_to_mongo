@@ -53,15 +53,19 @@ public class MigUtil {
 		while ((str = br.readLine()) != null) {
 			strOut.append(str);
 		}
-		return strOut.toString();
+		
+		return new String(strOut.toString().getBytes("ksc5601"));
+		
 	}
 	
 	public static String base64Decoding(String str) throws Exception , IllegalArgumentException {
 		Decoder decoder = Base64.getDecoder();
-		byte[] decodedBytes = decoder.decode(str.getBytes("EUC-KR"));
+		
+		byte[] decodedBytes =  decoder.decode(str);
+		
 		//byte[] decodedBytes = str.getBytes();
 		//byte[] decodedBytes = DatatypeConverter.parseBase64Binary(str);		
-		return new String(decodedBytes);
+		return new String(decodedBytes,"euc-kr");
 	}
 	
 	

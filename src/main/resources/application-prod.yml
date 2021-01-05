@@ -1,15 +1,20 @@
 dbinfo:
-   oracleip: localhost
+   oracleip: 10.10.84.150
    oracleport: 1521
-   oracleid: system
-   oraclepw: oracle
-   oracledatabasename: XE
-   mongouri: mongodb://jaehyun:jaehyun@localhost:27017/
-   mongodatabasename: forum
-   mongodatabaseargs: authMechanism=SCRAM-SHA-1
+   oracleid: adm_vit
+   oraclepw: "vit_adm123!"
+   oracledatabasename: vitdb
+   mongouri:  mongodb://pcsadm:pcsadm%2100@10.11.63.112:27017,10.11.63.113:27017,10.11.63.114:27017/
+   mongodatabasename: ApptxPersonalization
+   mongodatabaseargs: replicaSet=PCSReplSet&authSource=admin
    fromRowNum: 1
-   toRowNum: 1000
-   servicetype: insert
+   toRowNum: 10000
+   infoTableFromSeq : 1
+   infoTableToSeq : 10000
+   servicetype: "0"
+   fromUptDtm: "20121220071237"
+   toUptDtm : "20121220071237"   
+   bulkUpdateYn : "Y"
 
 #spring:
 #  data:
@@ -18,6 +23,8 @@ dbinfo:
 #      database: test
 ---
 logging:
+  path: ./
+  file: etl.log
   level:
     root: info
     sun.rmi: info
@@ -25,4 +32,3 @@ logging:
     org.springframework: info
     com.mongodb.migtool: debug
     com.zaxxer.hikari: off
-
